@@ -28,7 +28,7 @@ $(OBJSDIR)/cmdline.o: $(CMDLINE)
 test: $(OBJSDIR)/cmdline.o $(OBJSDIR)/test.o
 	$(CXX) $(CXXARGS) -o $@ $(OBJSDIR)/cmdline.o $(OBJSDIR)/test.o
 
-run_test: test
+run_test: test // Da error pero funciona
 	valgrind --leak-check=yes ./test
 
 clean:
