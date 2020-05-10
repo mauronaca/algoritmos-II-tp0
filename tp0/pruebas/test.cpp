@@ -12,7 +12,7 @@ using namespace std;
 
 static void opt_inputf(string const &); 
 //static void opt_outputf(string const &);
-static void opt_indata(string const &);
+static void opt_funcion(string const &);
 
 /*---------------------------------------------------------*/
 /*-------------------- Elementos Globales -----------------*/
@@ -26,7 +26,7 @@ static string  str;
 //
 static option_t options[] = {
 	{1, "i", "input", def_val, opt_inputf, OPT_DEFAULT},
-	{1, "s", "string", NULL, opt_indata, OPT_MANDATORY},
+	{1, "s", "string", NULL, opt_funcion, OPT_MANDATORY},
 	//{1, "o", "output", def_val, opt_outputf, OPT_DEFAULT},
 	{0, } // Eso es necesario, si no la clase cmdline se rompe (?
 };
@@ -70,7 +70,7 @@ static void opt_inputf(string const & arg){
 	}
 }
 
-static void opt_indata(string const & arg){
+static void opt_funcion(string const & arg){
 	// Funcion para extraer el dato pasado por argumento 
 	// 
 	//	
