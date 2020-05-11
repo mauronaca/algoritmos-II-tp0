@@ -10,7 +10,7 @@ class image{
 private:
 	
 	int ** valMat;
-	Complejo ** zMat;
+	Complejo ** zMat; // Matriz con cada numero complejo, asociado a cada pixel (?
 	int largo;
 	int ancho;
 
@@ -32,7 +32,7 @@ public:
 	//
 	~image();
 
-	// Operador = . A la derecha recibe un objeto constante, y ademas lo devuelve por referencia. 
+	// Operador = 
 	//
 	const image & operator=(const image &);
 	
