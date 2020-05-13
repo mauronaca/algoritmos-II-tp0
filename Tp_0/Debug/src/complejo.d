@@ -1,3 +1,3 @@
-src/complejo.o: ../src/complejo.cpp ../src/Complejo.h
+src/complejo.o: ../src/complejo.cpp ../src/complejo.h
 
-../src/Complejo.h:
+../src/complejo.h:

@@ -1,4 +1,4 @@
-#include "Complejo.h"
+#include "complejo.h"
 
 
 Complejo::Complejo(){
@@ -23,8 +23,8 @@ Complejo::~Complejo(){
 double& Complejo::operator[] (double i){
 	if(i == 1)
 		return this->imag;
-	else
-		return this->real;
+	
+	return this->real;
 }
 Complejo& Complejo::operator= (const Complejo& a){
 	if(&a != this){
