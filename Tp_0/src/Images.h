@@ -20,7 +20,7 @@ private:
 	int width;
 	int height;
 	int maxInt; // Intensidad maxima de la imagen
-	int ** mat; // Matriz
+	int ** mat; // Matriz. Podria usarse la clase vector... Por ahora lo implemento asi
 
 public:
 	Images();
