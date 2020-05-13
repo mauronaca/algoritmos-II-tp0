@@ -7,7 +7,7 @@
 
 #include "Images.h"
 
-Images::Images() {
+Images::Images(int width, int height, int max) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -21,8 +21,9 @@ Images::Images(const Images &other) {
 
 }
 
-Images& Images::operator=(const Images &other) {
+const Images& Images::operator=(const Images &other) {
 	// TODO Auto-generated method stub
 
 }
+
 
