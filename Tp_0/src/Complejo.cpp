@@ -92,6 +92,10 @@ Complejo Complejo::operator+(double right){
 	return aux;
 }
 
+Complejo operator+ (double left, const Complejo & right){
+	return Complejo(right.real + left, right.imag);
+}
+
 //resta
 Complejo Complejo::operator-(const Complejo & right){
 	Complejo aux(real - right.real, imag - right.imag);
@@ -101,6 +105,10 @@ Complejo Complejo::operator-(const Complejo & right){
 Complejo Complejo::operator-(double right){
 	Complejo aux(real - right, imag);
 	return aux;
+}
+
+Complejo operator- (double left, const Complejo & right){
+	return Complejo(left - right.real, - right.imag );
 }
 
 //producto
@@ -113,6 +121,11 @@ Complejo Complejo::operator*(double right){
 	Complejo aux(right*real, right*imag);
 	return aux;
 }
+
+Complejo operator* (double left, const Complejo & right){
+	return Complejo(left * right.real, left * right.imag);
+}
+
 
 //división
 Complejo Complejo::operator/(const Complejo & right){

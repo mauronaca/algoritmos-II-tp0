@@ -41,12 +41,15 @@ public:
 	//sobrecarga de operadores
 	Complejo operator+(const Complejo &); //suma entre Complejos
 	Complejo operator+(double); //suma con un real
+	friend Complejo operator+ (double, const Complejo &); 
 
 	Complejo operator-(const Complejo &); //resta ente Complejos
 	Complejo operator-(double); //resta por un real
+	friend Complejo operator- (double, const Complejo &);
 
 	Complejo operator*(const Complejo &); //producto entre Complejos
 	Complejo operator*(double); //producto por un real (escalar)
+	friend Complejo operator* (double, const Complejo &);
 
 	Complejo operator/(const Complejo&); //división entre Complejos
 	Complejo operator/(double); //división por un real (escalar)
