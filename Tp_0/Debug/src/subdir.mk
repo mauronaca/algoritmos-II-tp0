@@ -7,21 +7,21 @@ CPP_SRCS += \
 ../src/ComplexPlane.cpp \
 ../src/Images.cpp \
 ../src/cmdline.cpp \
-../src/complejo.cpp \
+../src/Complejo.cpp \
 ../src/main.cpp 
 
 OBJS += \
 ./src/ComplexPlane.o \
 ./src/Images.o \
 ./src/cmdline.o \
-./src/complejo.o \
+./src/Complejo.o \
 ./src/main.o 
 
 CPP_DEPS += \
 ./src/ComplexPlane.d \
 ./src/Images.d \
 ./src/cmdline.d \
-./src/complejo.d \
+./src/Complejo.d \
 ./src/main.d 
 
 
