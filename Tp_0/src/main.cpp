@@ -22,7 +22,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("feep.ascii.pgm", ios::in);
+	ifs.open("utils/dragon.ascii.pgm", ios::in);
 	ofs.open("fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
@@ -30,6 +30,7 @@ int main() {
 	string stest;
 
 	if(!iss->good()){
+		cout << "1-" << endl;
 		cout << "Fallo al abrir el archivo" << endl;
 		exit(1);
 	}
