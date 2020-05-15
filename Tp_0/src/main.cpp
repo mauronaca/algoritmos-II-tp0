@@ -11,14 +11,30 @@
 #include "Complejo.h"
 using namespace std;
 
+static istream* iss = 0;
+static ostream* oss = 0;
+static fstream ifs;
+static fstream ofs;
+
 int main() {
 
 	/*----------------------------------------*/
-	/*-------- PERDON POR EL DESORDEN --------*/
+	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	Images imagen(10,10,15);
-	int** matriz = imagen.getMatrix();
+	ifs.open("feep.ascii.pgm", ios::in);
+	ofs.open("fusible.pgm", ios::out);
+	oss = &ofs;
+	iss = &ifs;
+
+	string stest;
+
+	if(!iss->good()){
+		cout << "Fallo al abrir el archivo" << endl;
+		exit(1);
+	}
+
+
 	Complejo Z1, Z2;
 	Complejo Z3(5,5);
 	Complejo Z4(1,1);
@@ -42,8 +58,21 @@ int main() {
 	Z1 = Z2 + Z3*Z3;
 
 	Z1.printPolar();
-	cout << matriz[1][1] << endl;
 
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+	Images imagen(10,10,15);
+	Images imagenDefault;
+	imagen.loadFile(iss);
+
+	cout << "Datos imagen:" << endl;
+	cout << "Ancho: " << imagen.getWidth() << " Altura: " << imagen.getHeight() << " Maximo brillo: " << imagen.getMaxInt() << endl;
+	cout << imagen[1][1] << endl;
+	cout << endl;
+
+	imagen.printColours();
+	imagenDefault.printColours();
+
+	ifs.close();
+	ofs.close();
+
 	return 0;
 }
