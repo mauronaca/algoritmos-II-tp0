@@ -136,7 +136,7 @@ void Images::printColours(){
 	for(int i = 0; i < this->height; i++){
 		for(int j = 0; j < this->width; j++){
 			//cout << this->imagen[i][j] << " ";
-            std::cout << std::right << std::setw(3) << this->imagen[i][j];
+            std::cout << std::left << std::setw(2) << this->imagen[i][j];
 		}
 		cout << endl;
 	}
@@ -178,17 +178,17 @@ const Images & Images::loadFile(std::istream * image){
 	cout << auxstr << endl;
 
 	/*--------------------------------------*/
-	/*Reasigno el tamaño de la imagen. Borro*/
+	/*Reasigno el tama? de la imagen. Borro*/
 	/*de la memoria la matriz y				*/
 	/* vuelvo a pedir memoria para el		*/
-	/* nuevo tamaño							*/
+	/* nuevo tama?							*/
 	/*--------------------------------------*/
 	/* Libero mat*/
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
 
-	/* Leo los nuevos tamaños desde el archivo*/
+	/* Leo los nuevos tama?s desde el archivo*/
 	buffer << image->rdbuf();
 	buffer >> this->width >> this->height;
 
@@ -215,6 +215,23 @@ const Images & Images::loadFile(std::istream * image){
 
 const Images & Images::saveFile(ostream * image){
 
+	if(!image->good()){
+		cerr << "Fallo al abrir el archivo" << endl;
+		return *this;
+	}
+
+	*image << this->magicNumber << endl;
+	*image << "# Imagen .pgm generada desde tp0.exe" << endl;
+	*image << this->width << " " << this->height << endl;
+	*image << this->maxInt << endl;
+
+	for(int fils = 0; fils < this->height; fils++){
+		for(int cols = 0; cols < this->width; cols++){
+			*image << this->imagen[fils][cols] << endl;
+		}
+	}
+
+	return *this;
 }
 
 

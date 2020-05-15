@@ -23,7 +23,7 @@ int main() {
 	/*----------------------------------------*/
 	
 	ifs.open("utils/dragon.ascii.pgm", ios::in);
-	ofs.open("fusible.pgm", ios::out);
+	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
 
@@ -70,7 +70,8 @@ int main() {
 	cout << endl;
 
 	imagen.printColours();
-	imagenDefault.printColours();
+	//imagenDefault.printColours();
+	imagen.saveFile(oss);
 
 	ifs.close();
 	ofs.close();
