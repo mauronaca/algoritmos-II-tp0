@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 
 class Images {
@@ -20,7 +21,22 @@ private:
 	int width;
 	int height;
 	int maxInt; // Intensidad maxima de la imagen
-	int ** mat; // Matriz. Podria usarse la clase vector... Por ahora lo implemento asi
+	int ** imagen; // Matriz. Podria usarse la clase vector... Por ahora lo implemento asi
+	std::string magicNumber; //
+
+	class fila{
+		friend class Images;
+	private:
+		Images & matriz;
+		int fil;
+		fila(Images & imagen_, int fila_): matriz(imagen_), fil(fila_) {}
+	public:
+		int & operator[](const int col) {
+			if( col >= matriz.width )
+				return matriz.imagen[0][0];
+			return matriz.imagen[fil][col];
+		}
+	};
 
 public:
 	Images();
@@ -29,13 +45,21 @@ public:
 	Images(const Images &other);
 
 	const Images& operator=(const Images &other);
+	int & operator[](const std::pair<int,int> &);
+	fila operator[](const int);
 
-	const Images & loadFile(std::istream & );
-	const Images & saveFile(std::ostream & );
+	const Images & loadFile(std::istream * ); // Duda si recibirlo por referencia o puntero/
+	const Images & saveFile(std::ostream * ); // Duda si rei\cibirlo por referencia o puntero
 
+	int getMaxInt();
 	int getWidth();
 	int getHeight();
-	int ** getMatrix();
+	std::string getMagicNumber();
+	int ** getColours();
+
+	void printColours();
+
+	bool isPGM();
 };
 
 #endif /* IMAGES_H_ */
