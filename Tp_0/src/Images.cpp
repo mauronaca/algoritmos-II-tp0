@@ -1,10 +1,3 @@
-/*
- * Images.cpp
- *
- *  Created on: 12 may. 2020
- *      Author: Ramiro
- */
-
 #include "Images.h"
 #include <cstdlib>
 
@@ -15,8 +8,6 @@ Images::Images() {
 	this->height = 10;
 	this->maxInt = 255;
 
-	// Pido memoria para la matriz. En el caso que se use la clase vector no se como sera
-	//
 	this->imagen = new int * [this->height];
 
 	for(int filas = 0; filas < height; filas++)
@@ -177,12 +168,12 @@ const Images & Images::loadFile(std::istream * image){
 	//auxstr = auxstr.substr(2); // Se puede sacar, lo que hace es eliminar los 2 primeros caracteres
 	cout << auxstr << endl;
 
-	/*--------------------------------------*/
-	/*Reasigno el tama? de la imagen. Borro*/
-	/*de la memoria la matriz y				*/
-	/* vuelvo a pedir memoria para el		*/
-	/* nuevo tama?							*/
-	/*--------------------------------------*/
+	/*----------------------------------------*/
+	/* Reasigno el tamanio de la imagen. Borro*/
+	/* de la memoria la matriz y			  */
+	/* vuelvo a pedir memoria para el		  */
+	/* nuevo tamanio						  */
+	/*----------------------------------------*/
 	/* Libero mat*/
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];

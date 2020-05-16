@@ -1,10 +1,3 @@
-/*
- * ComplexPlane.h
- *
- *  Created on: 12 may. 2020
- *      Author: Ramiro
- */
-
 #ifndef COMPLEXPLANE_H_
 #define COMPLEXPLANE_H_
 
@@ -14,18 +7,25 @@
 class ComplexPlane {
 private:
 	Complejo comp; //número complejo guardado
-	Images image; //imagen
-	int index; //indice del pixel de una imagen (?)
+	Images image; //imagen utilizada
+	int row; //fila y
+	int col; //columna guardadas para el número complejo entregado
 
 public:
 	ComplexPlane();
-	virtual ~ComplexPlane();
-	ComplexPlane(const ComplexPlane &other);
-	ComplexPlane& operator=(const ComplexPlane &other);
+	ComplexPlane(Images &); //guarda los datos de una imagen para tener sus dimensiones
+	~ComplexPlane(); //destructor
+	ComplexPlane(const ComplexPlane &other); // constructor copia
+	ComplexPlane& operator=(const ComplexPlane &other); //sobrecarga de la asignación
 
+	
+	Complejo getComp();
+	Images getImage();
+	int getRow();
+	int getCol();
 
-	//Complejo index2Comp();
-	//Int comp2Index();
+	void index2Comp(int, int);
+	void comp2Index(Complejo &);
 
 };
 

@@ -22,7 +22,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/dragon.ascii.pgm", ios::in);
+	ifs.open("utils/test-comment.pgm", ios::in);
 	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
