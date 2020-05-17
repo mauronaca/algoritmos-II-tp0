@@ -38,7 +38,7 @@ int main() {
 	}
 
 
-	Images origen; //NO BORRAR
+	Images origen(10,10,15); //NO BORRAR
 	origen.loadFile(iss); //NO BORRAR
 
 	int ancho = origen.getWidth(); //NO BORRAR
