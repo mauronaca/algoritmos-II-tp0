@@ -1,3 +1,10 @@
+/*
+ * Images.cpp
+ *
+ *  Created on: 12 may. 2020
+ *      Author: Ramiro
+ */
+
 #include "Images.h"
 #include <cstdlib>
 
@@ -8,6 +15,8 @@ Images::Images() {
 	this->height = 10;
 	this->maxInt = 255;
 
+	// Pido memoria para la matriz. En el caso que se use la clase vector no se como sera
+	//
 	this->imagen = new int * [this->height];
 
 	for(int filas = 0; filas < height; filas++)
@@ -48,7 +57,7 @@ Images::Images(int width, int height, int max) {
 	//
 	for(int filas = 0; filas < height; filas++)
 		for(int cols = 0; cols < width; cols++)
-			this->imagen[filas][cols] = this->maxInt;
+			this->imagen[filas][cols] = 0;
 
 	this->magicNumber = "";
 }
@@ -56,6 +65,7 @@ Images::Images(int width, int height, int max) {
 Images::~Images() {
 	// TODO Auto-generated destructor stub
 
+	cout << "~Images()" << endl;
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
@@ -71,9 +81,19 @@ Images::Images(const Images &other) {
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
-
 	this->magicNumber = other.magicNumber;
-	this->imagen = other.imagen;
+
+	// Pido memoria p/ la matriz
+	//
+	this->imagen = new int * [this->height];
+	for(int filas = 0; filas < height; filas++)
+		this->imagen[filas] = new int[width];
+
+	// Inicializo la matriz
+	//
+	for(int filas = 0; filas < height; filas++)
+		for(int cols = 0; cols < width; cols++)
+			this->imagen[filas][cols] = other.imagen[filas][cols];
 }
 
 const Images& Images::operator=(const Images &other) {
@@ -137,71 +157,105 @@ void Images::printColours(){
 /*-----------Manejo de archivos-----------*/
 /*----------------------------------------*/
 
-// Precondicion: Validar el archivo.pgm
+
+bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , Images * image){
+	if(ss->peek() == EOF)
+		return true;
+
+	// Chequea si en la linea a leer existe el caracter #. En caso de que exista corta el proceso.
+	//
+	size_t npos = string::npos;
+	if (ss->str().find('#') != npos){
+		nline--;
+		return true;
+	}
+
+	// Primera linea el header
+	//
+	if(nline == 1){
+		image->magicNumber = ss->str();
+
+		// Elimina el \n o \r que en algunos .pgm aparece
+		//
+		for (size_t i = 0; i < image->magicNumber.length(); i++){
+		    if (		image->magicNumber.c_str()[i] == '\r'
+		    		|| 	image->magicNumber.c_str()[i] == '\n'
+		    		|| 	image->magicNumber.c_str()[i] == '\r\n'){
+
+		    	image->magicNumber = image->magicNumber.substr(0, i);
+		    }
+		}
+		// Si no es P2, la funcion devuelve falso. Y en ese caso debera cortar la carga del archivo ya que no estamos
+		// interesados en otro tipo de formato.
+		//
+		if( image->magicNumber.compare("P2") != 0 ){
+			cerr << "Formato no .pgm" << endl;
+			return false;
+		}
+		return true;
+	}
+
+	// Segunda linea. Primero elimina la matriz cargada por el construcutor. Luego lee los nuevos tama;os
+	// Por ultimo pide memoria para la matriz con los nuevos tamalios
+	//
+	if(nline == 2){
+		for(int i = 0; i < image->height; i++)
+			delete [] image->imagen[i];
+		delete [] image->imagen;
+
+		*ss >> image->width >> image->height;
+
+		image->imagen = new int * [image->height];
+
+		for(int filas = 0; filas < image->height; filas++)
+			image->imagen[filas] = new int[image->width];
+
+		return true;
+	}
+
+	// Tercera linea, lee el maximo brillo.
+	//
+	if(nline == 3){
+		*ss >> image->maxInt;
+		return true;
+	}
+
+	// Comienza a leer los colores
+	//
+	while( nfils < image->height && !ss->eof() ) {
+		for(; (ncols < image->width) && !ss->eof(); ncols++){
+			*ss >> image->imagen[nfils][ncols];
+		}
+		if(ncols == image->width){
+			ncols = 0;
+			nfils++;
+		}
+	}
+
+	return true;
+}
 
 const Images & Images::loadFile(std::istream * image){
-	string auxstr;
-	stringstream buffer;
 
 	if(!image->good()){
 		cerr << "Fallo al abrir el archivo" << endl;
 		return *this;
 	}
 
-	/* Lee la primer linea, el header. Si no corresponde con un tipo P2, corta la lectura */
-	getline(*image, this->magicNumber);
-	// En algunos archivos hay un \n o \r al final. Lo elimino del string.
-	for (size_t i = 0; i < this->magicNumber.length(); i++){
-	    if (this->magicNumber.c_str()[i] == '\r'
-	    		|| this->magicNumber.c_str()[i] == '\n'
-	    		|| this->magicNumber.c_str()[i] == '\r\n'){
-	    	this->magicNumber = this->magicNumber.substr(0, i);
-	    }
-	}
-	if( this->magicNumber.compare("P2") != 0 ){
-		cerr << "Formato no .pgm" << endl;
-		return *this;
-	}
+	string line;
+	int nline = 1;
+	int nfils = 0;
+	int ncols = 0;
 
-	/* Lee la segunda linea, generalmente algun comentario.*/
-	getline(*image, auxstr);
-	//auxstr = auxstr.substr(2); // Se puede sacar, lo que hace es eliminar los 2 primeros caracteres
-	cout << auxstr << endl;
-
-	/*----------------------------------------*/
-	/* Reasigno el tamanio de la imagen. Borro*/
-	/* de la memoria la matriz y			  */
-	/* vuelvo a pedir memoria para el		  */
-	/* nuevo tamanio						  */
-	/*----------------------------------------*/
-	/* Libero mat*/
-	for(int i = 0; i < height; i++)
-		delete [] this->imagen[i];
-	delete [] this->imagen;
-
-	/* Leo los nuevos tama?s desde el archivo*/
-	buffer << image->rdbuf();
-	buffer >> this->width >> this->height;
-
-	/* Vuelvo a pedir memoria */
-	this->imagen = new int * [this->height];
-
-	for(int filas = 0; filas < height; filas++)
-		this->imagen[filas] = new int[width];
-	/*--------------------------------------*/
-
-	buffer >> this->maxInt;
-
-	/*--------------------------------------*/
-	/* Colorear la imagen					*/
-	/*--------------------------------------*/
-	for(int filas = 0; filas < this->height; filas++){
-		for(int cols = 0; cols < this->width; cols++){
-			buffer >> imagen[filas][cols];
-		}
+	while( getline(*image, line) ){
+		stringstream ss(line);
+		if(!pgmParser(nline, nfils, ncols, &ss, this))
+			return *this;
+		nline++;
 	}
 
 	return *this;
+
 }
 
 const Images & Images::saveFile(ostream * image){
@@ -224,18 +278,3 @@ const Images & Images::saveFile(ostream * image){
 
 	return *this;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
