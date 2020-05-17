@@ -1,8 +1,6 @@
 /*
- * Images.h
- *
- *  Created on: 12 may. 2020
- *      Author: Ramiro
+ Clase Images.
+ En ella se guardan los datos de una imagen con formato .pgm
  */
 
 #ifndef IMAGES_H_
