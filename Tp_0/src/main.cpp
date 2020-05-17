@@ -1,14 +1,16 @@
 //============================================================================
 // Name        : Tp_0.cpp
-// Author      :
+// Author      : Nacacchian, Urquiza, Vera
 // Version     :
 // Copyright   : 
-// Description : Hello World in C++, Ansi-style
+// Description : Trabajo Práctico N° 0
 //============================================================================
 
 #include <iostream>
 #include "Images.h"
 #include "Complejo.h"
+#include "ComplexPlane.h"
+#include "ComplexTransform.h"
 using namespace std;
 
 static istream* iss = 0;
@@ -22,7 +24,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/test-comment.pgm", ios::in);
+	ifs.open("utils/marcie.ascii.pgm", ios::in);
 	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
@@ -36,43 +38,45 @@ int main() {
 	}
 
 
-	Complejo Z1, Z2;
-	Complejo Z3(5,5);
-	Complejo Z4(1,1);
-	double a = 10;
+	Images origen(10,10,15); //NO BORRAR
+	origen.loadFile(iss); //NO BORRAR
 
-	Complejo Z5;
-	Z2.setReal(2);
-	Z2.setImag(2);
+	int ancho = origen.getWidth(); //NO BORRAR
+	int altura = origen.getHeight(); //NO BORRAR
 
-	Z5 = Z3*Z4;
-	Z5.printRect();
-	Z5 = Z3 + Z4;
-	Z5.printRect();
-	Z3.printRect();
-	Z4.printRect();
-	Z5 = Z4*(Z4 + Z2);
-	Z5 = a*(2 +Z5 + 2)*100;
-	Z5.printRect();
-
-	Z1 = Z2 = Z4;
-	Z1 = Z2 + Z3*Z3;
-
-	Z1.printPolar();
-
-	Images imagen(10,10,15);
-	Images imagenDefault;
-	imagen.loadFile(iss);
-
-	cout << "Datos imagen:" << endl;
-	cout << "Ancho: " << imagen.getWidth() << " Altura: " << imagen.getHeight() << " Maximo brillo: " << imagen.getMaxInt() << endl;
-	cout << imagen[1][1] << endl;
+	cout << "Datos origen:" << endl;
+	cout << "Ancho: " << ancho << " Altura: " << altura << " Maximo brillo: " << origen.getMaxInt() << endl;
+	cout << origen[1][1] << endl;
 	cout << endl;
 
-	imagen.printColours();
-	//imagenDefault.printColours();
-	imagen.saveFile(oss);
+	//origen.printColours();
+	Images destino(origen); //NO BORRAR
+	Complejo aux(0,0);
+	
 
+	/*TEST DE COMPLEXPLANE Y COMPLEXTRANSFORM*/
+
+	ComplexPlane plano(origen);
+	ComplexTransform transformada(2);
+
+	for(int i = 0; i < altura; i++){
+		for(int j = 0; j < ancho; j++){
+			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
+			aux = plano.getComp();
+
+			transformada.fun(aux); //calcula la salida
+			aux = transformada.getOutput();
+			 
+			plano.comp2Index(aux); //guarda los indices del pixel del origen
+			
+			if(plano.getRow() >= 0 && plano.getCol() >= 0)
+				destino[i][j]=origen[plano.getRow()][plano.getCol()]; //guarda el pixel
+			else 
+				destino[i][j]=0; //guarda vacío
+		}
+	}
+
+	destino.saveFile(oss);
 	ifs.close();
 	ofs.close();
 

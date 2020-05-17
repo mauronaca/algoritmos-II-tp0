@@ -20,10 +20,10 @@ ComplexPlane::~ComplexPlane(){
 }
 
 ComplexPlane::ComplexPlane(const ComplexPlane & init){
-	comp = init.getComp();
-	image = init.getImage();
-	row = init.getRow();
-	col = init.getCol();
+	this->comp = init.getComp();
+	this->image = init.getImage();
+	this->row = init.getRow();
+	this->col = init.getCol();
 }
 
 ComplexPlane& ComplexPlane::operator=(const ComplexPlane & right){
@@ -31,29 +31,30 @@ ComplexPlane& ComplexPlane::operator=(const ComplexPlane & right){
 	image = right.getImage();
 	row = right.getRow();
 	col = right.getCol();
+	return *this;
 }
 
-Complejo getComp(){
+Complejo ComplexPlane::getComp() const {
 	return this->comp;
 }
 
-Images getImage(){
+Images ComplexPlane::getImage() const {
 	return this->image;
 }
 
-int getRow(){
+int ComplexPlane::getRow() const {
 	return this->row;
 }
 
-int getCol(){
+int ComplexPlane::getCol() const {
 	return this->col;
 }
 
 //guarda en this->comp un número complejo correspondiente a la posición solicitada de la imagen.
-void index2Comp(int row, int col){
+void ComplexPlane::index2Comp(int row, int col){
 	Complejo z(0,0);
 
-	if(0 > r >= image.getHeight || 0 > c >= image.getWidth) //valor inválido
+	if(0 > row || row >= image.getHeight() || 0 > col || col >= image.getWidth()) //valor inválido
 		this->comp = z;
 
 	else
@@ -64,8 +65,8 @@ void index2Comp(int row, int col){
 			no existirá un centro alcanzable. Pero igualmente se puede operar corriendo
 			dicho centro un paso hacia atrás.
 		*/
-		int rowCentral = image.getHeight()/2;
-		int colCentral = image.getWidth()/2;
+		int rowCentral = this->image.getHeight()/2;
+		int colCentral = this->image.getWidth()/2;
 		this->row = row;
 		this->col = col;
 
@@ -73,13 +74,13 @@ void index2Comp(int row, int col){
 			z.setImag((double) 1-row/rowCentral);
 
 		if(row > rowCentral)
-			z.setImag((double) -1 + ((image.getHeight() - 1) - row)/rowCentral);
+			z.setImag((double) -1 + ((this->image.getHeight() - 1) - row)/rowCentral);
 		
 		if(col <= colCentral)
 			z.setReal((double) -1+col/colCentral);
 
 		if(col > colCentral)
-			z.setReal((double) 1 - ((image.getWidth()-1) - col)/colCentral);
+			z.setReal((double) 1 - ((this->image.getWidth()-1) - col)/colCentral);
 
 		this->comp = z;
 	}
@@ -87,21 +88,21 @@ void index2Comp(int row, int col){
 }
 
 //guarda en row y col los índices asociados al número complejo entregado
-void comp2Index(Complejo & z){
+void ComplexPlane::comp2Index(Complejo & z){
 	double real = z.getReal();
 	double imaginario = z.getImag();
 	
 
 	if(abs(real) > 1 || abs(imaginario) > 1) //sale por fuera del plano 
 	{
-		this->row = 0;
-		this->col = 0;
+		this->row = -1;
+		this->col = -1;
 	} 
 
 	else
 	{
-		int rowCentral = image.getHeight()/2;
-		int colCentral = image.getWidth()/2;
+		int rowCentral = this->image.getHeight()/2;
+		int colCentral = this->image.getWidth()/2;
 		this->comp = z;
 
 		//se aplican las funciones inversas a las utilizadas en index2comp();
@@ -109,13 +110,13 @@ void comp2Index(Complejo & z){
 			this->col = colCentral*(real+1);
 
 		if(real > 0)
-			this->col = (real-1)*colCentral + (image.getWidth()-1);
+			this->col = (real-1)*colCentral + (this->image.getWidth()-1);
 
-		if(imag <= 0)
-			this->row = (1-imag)*rowCentral;
+		if(imaginario <= 0)
+			this->row = (1-imaginario)*rowCentral;
 
-		if(imag > 0)
-			this->row = (image.getHeight()-1) - (imaginario+1)*rowCentral;
+		if(imaginario > 0)
+			this->row = (this->image.getHeight()-1) - (imaginario+1)*rowCentral;
 	}
 
 }

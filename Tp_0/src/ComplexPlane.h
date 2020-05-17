@@ -15,14 +15,14 @@ public:
 	ComplexPlane();
 	ComplexPlane(Images &); //guarda los datos de una imagen para tener sus dimensiones
 	~ComplexPlane(); //destructor
-	ComplexPlane(const ComplexPlane &other); // constructor copia
-	ComplexPlane& operator=(const ComplexPlane &other); //sobrecarga de la asignación
+	ComplexPlane(const ComplexPlane &); // constructor copia
+	ComplexPlane& operator=(const ComplexPlane &); //sobrecarga de la asignación
 
 	
-	Complejo getComp();
-	Images getImage();
-	int getRow();
-	int getCol();
+	Complejo getComp() const;
+	Images getImage() const;
+	int getRow() const;
+	int getCol() const;
 
 	void index2Comp(int, int);
 	void comp2Index(Complejo &);
