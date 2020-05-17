@@ -16,14 +16,18 @@ static ostream* oss = 0;
 static fstream ifs;
 static fstream ofs;
 
+
+#define INPUT_IMAGE_PATH "Debug/utils/dragon.ascii.pgm"
+#define OUTPUT_IMAGE_PATH "Debug/utils/fusible.pgm"
+
 int main() {
 
 	/*----------------------------------------*/
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/dragon.ascii.pgm", ios::in);
-	ofs.open("utils/fusible.pgm", ios::out);
+	ifs.open(INPUT_IMAGE_PATH, ios::in);
+	ofs.open(OUTPUT_IMAGE_PATH, ios::out);
 	oss = &ofs;
 	iss = &ifs;
 
@@ -35,31 +39,6 @@ int main() {
 		exit(1);
 	}
 
-
-	Complejo Z1, Z2;
-	Complejo Z3(5,5);
-	Complejo Z4(1,1);
-	double a = 10;
-
-	Complejo Z5;
-	Z2.setReal(2);
-	Z2.setImag(2);
-
-	Z5 = Z3*Z4;
-	Z5.printRect();
-	Z5 = Z3 + Z4;
-	Z5.printRect();
-	Z3.printRect();
-	Z4.printRect();
-	Z5 = Z4*(Z4 + Z2);
-	Z5 = a*(2 +Z5 + 2)*100;
-	Z5.printRect();
-
-	Z1 = Z2 = Z4;
-	Z1 = Z2 + Z3*Z3;
-
-	Z1.printPolar();
-
 	Images imagen(10,10,15);
 	Images imagenDefault;
 	imagen.loadFile(iss);
@@ -69,9 +48,9 @@ int main() {
 	cout << imagen[1][1] << endl;
 	cout << endl;
 
-	imagen.printColours();
+	//imagen.printColours();
 	//imagenDefault.printColours();
-	imagen.saveFile(oss);
+	//imagen.saveFile(oss);
 
 	ifs.close();
 	ofs.close();

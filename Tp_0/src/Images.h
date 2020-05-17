@@ -49,11 +49,11 @@ public:
 	fila operator[](const int);
 
 	const Images & loadFile(std::istream * ); // Duda si recibirlo por referencia o puntero/
-	const Images & saveFile(std::ostream * ); // Duda si rei\cibirlo por referencia o puntero
+	const Images & saveFile(std::ostream * ); // Duda si recibirlo por referencia o puntero
 
 	int getMaxInt();
-	int getWidth();
-	int getHeight();
+	int getWidth() const;
+	int getHeight() const;
 	std::string getMagicNumber();
 	int ** getColours();
 

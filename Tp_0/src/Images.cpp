@@ -106,7 +106,7 @@ Images::fila Images::operator[](const int fil){
 	return fila(*this, fil);
 }
 
-int Images::getWidth(){
+int Images::getWidth() const {
 	return this->width;
 }
 
@@ -114,7 +114,7 @@ int Images::getMaxInt(){
 	return this->maxInt;
 }
 
-int Images::getHeight(){
+int Images::getHeight() const {
 	return this->height;
 }
 

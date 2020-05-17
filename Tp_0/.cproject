@@ -87,7 +87,7 @@
                     					
                     <sourceEntries>
                         						
-                        <entry excluding="Inc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+                        <entry excluding="test_Complejo.cpp|Inc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
                         					
                     </sourceEntries>
                     				
@@ -183,7 +183,7 @@
                     					
                     <sourceEntries>
                         						
-                        <entry excluding="Inc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+                        <entry excluding="test_Complejo.cpp|Inc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
                         					
                     </sourceEntries>
                     				
