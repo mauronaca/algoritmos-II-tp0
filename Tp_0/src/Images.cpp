@@ -37,7 +37,7 @@ Images::Images(int width, int height, int max) {
 		this->maxInt = max;
 	}
 
-	// Pido memoria para la matriz. En el caso que se use la clase vector no se como sera
+	// Pido memoria para la matriz.
 	//
 	this->imagen = new int * [this->height];
 
@@ -54,12 +54,11 @@ Images::Images(int width, int height, int max) {
 }
 
 Images::~Images() {
-	// TODO Auto-generated destructor stub
-
-	for(int i = 0; i < height; i++)
+	int i = 0;
+	for(i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
-
+	std::cout<<"ITERACIONES: " << i << std::endl;
 	this->width = 0;
 	this->height = 0;
 	this->maxInt = 0;
