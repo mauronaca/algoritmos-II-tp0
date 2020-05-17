@@ -1,9 +1,3 @@
-/*
- * Images.cpp
- *
- *  Created on: 12 may. 2020
- *      Author: Ramiro
- */
 
 #include "Images.h"
 #include <cstdlib>
