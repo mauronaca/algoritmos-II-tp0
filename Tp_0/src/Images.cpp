@@ -243,10 +243,33 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		for(; (ncols < image->width) && !ss->eof(); ncols++){
 			*ss >> image->imagen[nfils][ncols];
 		}
+    // Esta verificacion es por si el for corto por el lado de que se llego a eof
 		if(ncols == image->width){
 			ncols = 0;
 			nfils++;
 		}
+	}
+
+	return true;
+}
+
+const Images & Images::loadFile(std::istream * image){
+
+	if(!image->good()){
+		cerr << "Fallo al abrir el archivo" << endl;
+		return *this;
+	}
+
+	string line;
+	int nline = 1;
+	int nfils = 0;
+	int ncols = 0;
+
+	while( getline(*image, line) ){
+		stringstream ss(line);
+		if(!pgmParser(nline, nfils, ncols, &ss, this))
+			return *this;
+		nline++;
 	}
 
 	return true;
