@@ -63,9 +63,6 @@ Images::Images(int width, int height, int max) {
 }
 
 Images::~Images() {
-	// TODO Auto-generated destructor stub
-
-	cout << "~Images()" << endl;
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
@@ -97,7 +94,27 @@ Images::Images(const Images &other) {
 }
 
 const Images& Images::operator=(const Images &other) {
-	// TODO Auto-generated method stub
+	if(this == &other)
+		return *this;
+
+	this->width = other.width;
+	this->height = other.height;
+	this->maxInt = other.maxInt;
+	this->magicNumber = other.magicNumber;
+
+	// Pido memoria p/ la matriz
+	//
+	this->imagen = new int * [this->height];
+	for(int filas = 0; filas < height; filas++)
+		this->imagen[filas] = new int[width];
+
+	// Inicializo la matriz
+	//
+	for(int filas = 0; filas < height; filas++)
+		for(int cols = 0; cols < width; cols++)
+			this->imagen[filas][cols] = other.imagen[filas][cols];
+
+	return *this;
 
 }
 
@@ -226,10 +243,33 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		for(; (ncols < image->width) && !ss->eof(); ncols++){
 			*ss >> image->imagen[nfils][ncols];
 		}
+    		// Esta verificacion es por si el for corto por el lado de que se llego a eof
 		if(ncols == image->width){
 			ncols = 0;
 			nfils++;
 		}
+	}
+
+	return true;
+}
+
+const Images & Images::loadFile(std::istream * image){
+
+	if(!image->good()){
+		cerr << "Fallo al abrir el archivo" << endl;
+		return *this;
+	}
+
+	string line;
+	int nline = 1;
+	int nfils = 0;
+	int ncols = 0;
+
+	while( getline(*image, line) ){
+		stringstream ss(line);
+		if(!pgmParser(nline, nfils, ncols, &ss, this))
+			return *this;
+		nline++;
 	}
 
 	return true;
