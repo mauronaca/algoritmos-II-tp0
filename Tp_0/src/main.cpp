@@ -24,7 +24,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/marcie.ascii.pgm", ios::in);
+	ifs.open("utils/test0.pgm", ios::in);
 	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
@@ -57,19 +57,23 @@ int main() {
 	/*TEST DE COMPLEXPLANE Y COMPLEXTRANSFORM*/
 
 	ComplexPlane plano(origen);
-	ComplexTransform transformada(2);
+	ComplexTransform transformada(1);
 
 	for(int i = 0; i < altura; i++){
 		for(int j = 0; j < ancho; j++){
 			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
 			aux = plano.getComp();
+			cout<<"Punto de salida: ";
+			aux.printRect();
 
 			transformada.fun(aux); //calcula la salida
 			aux = transformada.getOutput();
+			cout<<"Punto de entrada: ";
+			aux.printRect();
 			 
 			plano.comp2Index(aux); //guarda los indices del pixel del origen
 			
-			if(plano.getRow() >= 0 && plano.getCol() >= 0)
+			if(plano.getRow() != -1 || plano.getCol() != -1)
 				destino[i][j]=origen[plano.getRow()][plano.getCol()]; //guarda el pixel
 			else 
 				destino[i][j]=0; //guarda vacío

@@ -14,9 +14,7 @@ ComplexPlane::ComplexPlane(Images & original){
 }
 
 ComplexPlane::~ComplexPlane(){
-	this->image.~Images();
-	this->comp.~Complejo();
-	row = col = 0;
+
 }
 
 ComplexPlane::ComplexPlane(const ComplexPlane & init){
