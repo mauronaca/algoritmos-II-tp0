@@ -243,7 +243,7 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		for(; (ncols < image->width) && !ss->eof(); ncols++){
 			*ss >> image->imagen[nfils][ncols];
 		}
-    // Esta verificacion es por si el for corto por el lado de que se llego a eof
+    		// Esta verificacion es por si el for corto por el lado de que se llego a eof
 		if(ncols == image->width){
 			ncols = 0;
 			nfils++;
