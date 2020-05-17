@@ -5,6 +5,8 @@
 using namespace std;
 
 Images::Images() {
+	// Valores al azar sin criterio alguno
+	// 
 	this->width = 10;
 	this->height = 10;
 	this->maxInt = 255;
@@ -16,11 +18,11 @@ Images::Images() {
 	for(int filas = 0; filas < height; filas++)
 		this->imagen[filas] = new int[width];
 
-	// Inicializo la matriz
+	// Inicializo la matriz con todo 0´s
 	//
 	for(int filas = 0; filas < height; filas++)
 		for(int cols = 0; cols < width; cols++)
-			this->imagen[filas][cols] = this->maxInt;
+			this->imagen[filas][cols] = 0;
 
 	this->magicNumber = "";
 }
@@ -29,6 +31,7 @@ Images::Images(int width, int height, int max) {
 
 	if(width <= 0 || height <= 0){
 		// Valores por defecto: (Los elegi sin criterio)
+		//
 		this->width = 10;
 		this->height = 10;
 		this->maxInt = 255;
@@ -40,27 +43,31 @@ Images::Images(int width, int height, int max) {
 		this->maxInt = max;
 	}
 
-	// Pido memoria para la matriz. En el caso que se use la clase vector no se como sera
+	// Pido memoria para la matriz.
 	//
 	this->imagen = new int * [this->height];
 
 	for(int filas = 0; filas < height; filas++)
 		this->imagen[filas] = new int[width];
 
-	// Inicializo la matriz
+	// Inicializo la matriz con 0´s
 	//
 	for(int filas = 0; filas < height; filas++)
 		for(int cols = 0; cols < width; cols++)
 			this->imagen[filas][cols] = 0;
-
+	
+	// El nombre del ehader queda en blanco
 	this->magicNumber = "";
 }
 
 Images::~Images() {
+	// Destructor, debe eliminar la memoria pedida
+ 	//
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
-
+	
+	// Pongo todos los valores en 0
 	this->width = 0;
 	this->height = 0;
 	this->maxInt = 0;
@@ -69,6 +76,9 @@ Images::~Images() {
 }
 
 Images::Images(const Images &other) {
+	// Constructor copia. Le asigna todos los atributos iguales a other, y
+	// Pide memoria para una nueva matriz
+	//
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
@@ -80,7 +90,7 @@ Images::Images(const Images &other) {
 	for(int filas = 0; filas < height; filas++)
 		this->imagen[filas] = new int[width];
 
-	// Inicializo la matriz
+	// Inicializo la matriz con los valores de other
 	//
 	for(int filas = 0; filas < height; filas++)
 		for(int cols = 0; cols < width; cols++)
@@ -88,9 +98,11 @@ Images::Images(const Images &other) {
 }
 
 const Images& Images::operator=(const Images &other) {
+	// Si son iguales, no hace nada.
+	//
 	if(this == &other)
 		return *this;
-
+	
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
@@ -113,9 +125,14 @@ const Images& Images::operator=(const Images &other) {
 }
 
 int & Images::operator[](const std::pair<int,int> & index){
+	
+	// Le asigno a row el primer valor de <int,int> (fila) 
+	// Y a col el segundo valor (columna)
+	//
 	int row = index.first;
 	int col = index.second;
 
+	// Si los indices estan afuera devuelve el valor de [0][0]
 	if( (row < 0 || row >= this->height) && (col < 0 || col >= this->width) )
 		return this->imagen[0][0];
 
@@ -123,8 +140,14 @@ int & Images::operator[](const std::pair<int,int> & index){
 }
 
 Images::fila Images::operator[](const int fil){
+	
+	// Si el indice de fila pasado es menor a 0 o mayor a la altura
+	// devuelve un objeto fila con argumentos: El objeto imagen this, y el indice fila 0
+	//
 	if( fil < 0 || fil >= this->height)
 			return fila(*this, 0);
+	// Si el indice pasado esta bien, se le pasa a fila ese indice
+	// 
 	return fila(*this, fil);
 }
 
@@ -164,10 +187,8 @@ void Images::printColours(){
 	}
 }
 
-/*----------------------------------------*/
-/*-----------Manejo de archivos-----------*/
-/*----------------------------------------*/
-
+/*--------------------------------------------------------------------------------*/
+/*------------------------------ Manejo de archivos ------------------------------*/
 
 bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , Images * image){
 	if(ss->peek() == EOF)
@@ -275,12 +296,23 @@ const Images & Images::loadFile(std::istream * image){
 		cerr << "Fallo al abrir el archivo" << endl;
 		return *this;
 	}
-
+	
+	// line es el string donde se almacenera la linea leida en cuestion.
+	// nline es el numero de linea. La primer linea es donde esta el magic number, la segunda linea
+	// es donde esta la altura y ancho y la tercera linea el maximo brillo.
+	// Todas las lineas siguientes corresponden a los valores de intensidad de la imagen. Si hay un comentario
+	// se ignora esa linea en cuestion.
+	//
 	string line;
 	int nline = 1;
 	int nfils = 0;
 	int ncols = 0;
 
+	// Lee linea por linea y la almacena en string, hasta encontrar eof.
+	// Luego se llama a la funcion pgmParse, la cual se encargara de procesar que linea es en cuestion
+	// y guardar los valores en la clase imagen. Notar que en esa funcion si se encuentra un comentario
+	// nline no aumenta. 
+	//
 	while( getline(*image, line) ){
 		stringstream ss(line);
 		if(!pgmParser(nline, nfils, ncols, &ss, this))
