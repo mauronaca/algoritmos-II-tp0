@@ -65,6 +65,7 @@ Images::Images(int width, int height, int max) {
 Images::~Images() {
 	// TODO Auto-generated destructor stub
 
+	cout << "~Images()" << endl;
 	for(int i = 0; i < height; i++)
 		delete [] this->imagen[i];
 	delete [] this->imagen;
@@ -80,9 +81,19 @@ Images::Images(const Images &other) {
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
-
 	this->magicNumber = other.magicNumber;
-	this->imagen = other.imagen;
+
+	// Pido memoria p/ la matriz
+	//
+	this->imagen = new int * [this->height];
+	for(int filas = 0; filas < height; filas++)
+		this->imagen[filas] = new int[width];
+
+	// Inicializo la matriz
+	//
+	for(int filas = 0; filas < height; filas++)
+		for(int cols = 0; cols < width; cols++)
+			this->imagen[filas][cols] = other.imagen[filas][cols];
 }
 
 const Images& Images::operator=(const Images &other) {
