@@ -65,6 +65,7 @@ void ComplexPlane::index2Comp(int row, int col){
 		*/
 		int rowCentral = this->image.getHeight()/2;
 		int colCentral = this->image.getWidth()/2;
+
 		this->row = row;
 		this->col = col;
 

@@ -24,7 +24,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/test0.pgm", ios::in);
+	ifs.open("utils/test1.pgm", ios::in);
 	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
@@ -61,12 +61,14 @@ int main() {
 
 	for(int i = 0; i < altura; i++){
 		for(int j = 0; j < ancho; j++){
+			cout<<'('<<i<<','<<j<<')'<<endl;
+
 			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
 			aux = plano.getComp();
 			cout<<"Punto de salida: ";
 			aux.printRect();
 
-			transformada.fun(aux); //calcula la salida
+			transformada.fun(aux); //calcula la anti transformada
 			aux = transformada.getOutput();
 			cout<<"Punto de entrada: ";
 			aux.printRect();
