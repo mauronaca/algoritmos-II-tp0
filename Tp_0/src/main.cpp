@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : Tp_0.cpp
-// Author      : Nacacchian, Urquiza, Vera
+// Author      : Nacachian, Urquiza, Vera
 // Version     :
 // Copyright   : 
 // Description : Trabajo Práctico N° 0
