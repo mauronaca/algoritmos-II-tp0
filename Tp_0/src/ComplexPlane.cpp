@@ -1,4 +1,5 @@
 #include "ComplexPlane.h"
+using namespace std;
 
 ComplexPlane::ComplexPlane(){
 	row = col = 0;
@@ -65,21 +66,31 @@ void ComplexPlane::index2Comp(int row, int col){
 		*/
 		int rowCentral = this->image.getHeight()/2;
 		int colCentral = this->image.getWidth()/2;
-
 		this->row = row;
 		this->col = col;
 
-		if(row <= rowCentral)
-			z.setImag((double) 1-row/rowCentral);
+		if(row <= rowCentral){
+			//cout << row << " Estoy en las filas de arriba" << endl;
+			z.setImag( (1-(double)row/rowCentral) );
+			//cout << "j" << z.getImag() << endl;
+		}
 
-		if(row > rowCentral)
-			z.setImag((double) -1 + ((this->image.getHeight() - 1) - row)/rowCentral);
+
+		if(row > rowCentral){
+			//cout << row << " Estoy en las filas de abajo" << endl;
+			z.setImag( (-1 + ((double)(this->image.getHeight() - 1) - (double)row)/(double)rowCentral) );
+		}
 		
-		if(col <= colCentral)
-			z.setReal((double) -1+col/colCentral);
+		if(col <= colCentral){
+			//cout << col << " Estoy en las columnas de la izquierda" << endl;
+			z.setReal( (-1+(double)col/colCentral) );
+		}
 
 		if(col > colCentral)
-			z.setReal((double) 1 - ((this->image.getWidth()-1) - col)/colCentral);
+		{
+			//cout << col << " Estoy en las columnas de la deerecha" << endl;
+			z.setReal((double) (1 - (((double)this->image.getWidth()-1) - (double)col)/(double)colCentral) );
+		}
 
 		this->comp = z;
 	}
