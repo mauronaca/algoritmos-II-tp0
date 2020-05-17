@@ -274,28 +274,6 @@ const Images & Images::loadFile(std::istream * image){
 		cerr << "Fallo al abrir el archivo" << endl;
 		return *this;
 	}
-
-	string line;
-	int nline = 1;
-	int nfils = 0;
-	int ncols = 0;
-
-	while( getline(*image, line) ){
-		stringstream ss(line);
-		if(!pgmParser(nline, nfils, ncols, &ss, this))
-			return *this;
-		nline++;
-	}
-
-	return true;
-}
-
-const Images & Images::loadFile(std::istream * image){
-
-	if(!image->good()){
-		cerr << "Fallo al abrir el archivo" << endl;
-		return *this;
-	}
 	
 	// line es el string donde se almacenera la linea leida en cuestion.
 	// nline es el numero de linea. La primer linea es donde esta el magic number, la segunda linea

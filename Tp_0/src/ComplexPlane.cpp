@@ -15,7 +15,7 @@ ComplexPlane::ComplexPlane(Images & original){
 }
 
 ComplexPlane::~ComplexPlane(){
-
+	
 }
 
 ComplexPlane::ComplexPlane(const ComplexPlane & init){

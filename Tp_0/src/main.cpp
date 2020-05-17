@@ -61,24 +61,20 @@ int main() {
 
 	for(int i = 0; i < altura; i++){
 		for(int j = 0; j < ancho; j++){
-			cout<<'('<<i<<','<<j<<')'<<endl;
 
 			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
 			aux = plano.getComp();
-			cout<<"Punto de salida: ";
-			aux.printRect();
 
 			transformada.fun(aux); //calcula la anti transformada
 			aux = transformada.getOutput();
-			cout<<"Punto de entrada: ";
-			aux.printRect();
 			 
 			plano.comp2Index(aux); //guarda los indices del pixel del origen
 			
-			if(plano.getRow() != -1 || plano.getCol() != -1)
-				destino[i][j]=origen[plano.getRow()][plano.getCol()]; //guarda el pixel
-			else 
+			if(plano.getRow() < 0 || plano.getCol() < 0)
 				destino[i][j]=0; //guarda vacío
+			else
+				destino[i][j]=origen[plano.getRow()][plano.getCol()]; //guarda el pixel
+				
 		}
 	}
 
