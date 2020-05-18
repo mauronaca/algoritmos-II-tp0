@@ -11,7 +11,7 @@ Images::Images() {
 	this->height = 10;
 	this->maxInt = 255;
 
-	// Pido memoria para la matriz. En el caso que se use la clase vector no se como sera
+	// Pido memoria para la matriz.
 	//
 	this->imagen = new int * [this->height];
 
@@ -79,6 +79,7 @@ Images::Images(const Images &other) {
 	// Constructor copia. Le asigna todos los atributos iguales a other, y
 	// Pide memoria para una nueva matriz
 	//
+
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
@@ -103,6 +104,10 @@ const Images& Images::operator=(const Images &other) {
 	if(this == &other)
 		return *this;
 	
+	for(int i = 0; i < this->height; i++)
+		delete [] this->imagen[i];
+	delete [] this->imagen;
+
 	this->width = other.width;
 	this->height = other.height;
 	this->maxInt = other.maxInt;
@@ -269,7 +274,6 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 			ncols = 0;
 			nfils++;
 		}
-		cout << endl;
 	}
 
 	return true;

@@ -2,8 +2,6 @@
 using namespace std;
 
 ComplexPlane::ComplexPlane(){
-	//Images img;
-	//this->image = img;
 	row = col = 0;
 	this->comp.setReal(0);
 	this->comp.setImag(0);
