@@ -51,7 +51,7 @@ int main() {
 	/*-------------- Pruebas -----------------*/
 	/*----------------------------------------*/
 	
-	ifs.open("utils/test1.pgm", ios::in);
+	ifs.open("utils/dragon.ascii.pgm", ios::in);
 	ofs.open("utils/fusible.pgm", ios::out);
 	oss = &ofs;
 	iss = &ifs;
@@ -73,7 +73,7 @@ int main() {
 
 	cout << "Datos origen:" << endl;
 	cout << "Ancho: " << ancho << " Altura: " << altura << " Maximo brillo: " << origen.getMaxInt() << endl;
-	cout << origen[1][1] << endl;
+	//cout << origen[1][1] << endl;
 	cout << endl;
 
 	//origen.printColours();
@@ -105,6 +105,8 @@ int main() {
 		}
 	}
 
+	//origen.printColours();
+	//destino.printColours();
 	destino.saveFile(oss);
 	ifs.close();
 	ofs.close();

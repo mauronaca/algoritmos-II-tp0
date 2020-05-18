@@ -180,7 +180,6 @@ bool Images::isPGM(){
 void Images::printColours(){
 	for(int i = 0; i < this->height; i++){
 		for(int j = 0; j < this->width; j++){
-			//cout << this->imagen[i][j] << " ";
             std::cout << std::left << std::setw(2) << this->imagen[i][j];
 		}
 		cout << endl;
@@ -242,6 +241,12 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		for(int filas = 0; filas < image->height; filas++)
 			image->imagen[filas] = new int[image->width];
 
+		// Inicializo la matriz con 0´s
+		//
+		for(int filas = 0; filas < image->height; filas++)
+			for(int cols = 0; cols < image->width; cols++)
+				image->imagen[filas][cols] = 0;
+
 		return true;
 	}
 
@@ -256,13 +261,15 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 	//
 	while( nfils < image->height && !ss->eof() ) {
 		for(; (ncols < image->width) && !ss->eof(); ncols++){
-			*ss >> image->imagen[nfils][ncols];
+			if( !(*ss >> image->imagen[nfils][ncols]) )
+				ncols--;
 		}
-    		// Esta verificacion es por si el for corto por el lado de que se llego a eof
+    	// Esta verificacion es por si el for corto por el lado de que se llego a eof
 		if(ncols == image->width){
 			ncols = 0;
 			nfils++;
 		}
+		cout << endl;
 	}
 
 	return true;

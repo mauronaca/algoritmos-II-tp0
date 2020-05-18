@@ -13,7 +13,8 @@ private:
 
 public:
 	ComplexPlane();
-	ComplexPlane(Images &); //guarda los datos de una imagen para tener sus dimensiones
+	ComplexPlane(const Images &); //guarda los datos de una imagen para tener sus dimensiones
+	//ComplexPlane(Images & init) : image(init){ row = col = 0; comp.setImag(0); comp.setReal(0); }
 	~ComplexPlane(); //destructor
 	ComplexPlane(const ComplexPlane &); // constructor copia
 	ComplexPlane& operator=(const ComplexPlane &); //sobrecarga de la asignación

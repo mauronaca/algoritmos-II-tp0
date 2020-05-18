@@ -2,12 +2,14 @@
 using namespace std;
 
 ComplexPlane::ComplexPlane(){
+	//Images img;
+	//this->image = img;
 	row = col = 0;
 	this->comp.setReal(0);
 	this->comp.setImag(0);
 }
 
-ComplexPlane::ComplexPlane(Images & original){
+ComplexPlane::ComplexPlane(const Images & original){
 	row = col = 0;
 	this->image = original;
 	this->comp.setReal(0);
