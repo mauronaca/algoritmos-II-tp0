@@ -11,12 +11,39 @@
 #include "Complejo.h"
 #include "ComplexPlane.h"
 #include "ComplexTransform.h"
+
 using namespace std;
+
+
+/*=====================================================================================*/
+// 									ELEMENTOS GLOBALES 
+/*=====================================================================================*/
+
+// Opciones del programa (usando la libreria cmdline que proporcionaron en la practica): 
+//
+/* Hasta no definir las funciones opt_ 
+static option_t options[] = {
+	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
+	{1, "o", "output", "-", opt_output, OPT_DEFAULT},
+	{1, "f", "function", NULL, opt_factor, OPT_MANDATORY},
+	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
+	{0, },
+};*/
+
+// Funciones 
+//
+typedef enum token_functions {EXPZ, Z}; //, COSZ, SINZ };
+const string functions[] = {"exp(z)", "z"}; //, "cos(z)", "sin(z)" };
 
 static istream* iss = 0;
 static ostream* oss = 0;
 static fstream ifs;
 static fstream ofs;
+
+
+/*====================================================================================*/
+
+
 
 int main() {
 
