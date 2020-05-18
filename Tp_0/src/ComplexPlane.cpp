@@ -69,28 +69,20 @@ void ComplexPlane::index2Comp(int row, int col){
 		this->row = row;
 		this->col = col;
 
-		if(row <= rowCentral){
-			//cout << row << " Estoy en las filas de arriba" << endl;
+		if(row < rowCentral)
 			z.setImag( (1-(double)row/rowCentral) );
-			//cout << "j" << z.getImag() << endl;
-		}
 
 
-		if(row > rowCentral){
-			//cout << row << " Estoy en las filas de abajo" << endl;
-			z.setImag( (-1 + ((double)(this->image.getHeight() - 1) - (double)row)/(double)rowCentral) );
-		}
+
+		if(row >= rowCentral)
+			z.setImag( (-1 + (double)((this->image.getHeight() - 1) - row)/(double)rowCentral) );
+
 		
-		if(col <= colCentral){
-			//cout << col << " Estoy en las columnas de la izquierda" << endl;
+		if(col < colCentral)
 			z.setReal( (-1+(double)col/colCentral) );
-		}
 
-		if(col > colCentral)
-		{
-			//cout << col << " Estoy en las columnas de la deerecha" << endl;
-			z.setReal((double) (1 - (((double)this->image.getWidth()-1) - (double)col)/(double)colCentral) );
-		}
+		if(col >= colCentral)
+			z.setReal( (1 - (double)((this->image.getWidth()-1) - col)/(double)colCentral) );
 
 		this->comp = z;
 	}
@@ -116,16 +108,16 @@ void ComplexPlane::comp2Index(Complejo & z){
 		this->comp = z;
 
 		//se aplican las funciones inversas a las utilizadas en index2comp();
-		if(real <= 0)
+		if(real < 0)
 			this->col = colCentral*(real+1);
 
-		if(real > 0)
+		if(real >= 0)
 			this->col = (real-1)*colCentral + (this->image.getWidth()-1);
 
-		if(imaginario <= 0)
+		if(imaginario < 0)
 			this->row = (1-imaginario)*rowCentral;
 
-		if(imaginario > 0)
+		if(imaginario >= 0)
 			this->row = (this->image.getHeight()-1) - (imaginario+1)*rowCentral;
 	}
 
