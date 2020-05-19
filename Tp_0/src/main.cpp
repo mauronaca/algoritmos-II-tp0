@@ -32,7 +32,7 @@ static option_t options[] = {
 
 // Funciones 
 //
-typedef enum token_functions {EXPZ, Z}; //, COSZ, SINZ };
+//typedef enum token_functions {EXPZ, Z}; //, COSZ, SINZ };
 const string functions[] = {"exp(z)", "z"}; //, "cos(z)", "sin(z)" };
 
 static istream* iss = 0;
