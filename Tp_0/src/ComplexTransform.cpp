@@ -1,7 +1,10 @@
 #include "ComplexTransform.h"
 
+
+int ComplexTransform::UserOption = 0;
+
 ComplexTransform::ComplexTransform(){
-	this->option=0;
+	this->option = UserOption;
 }
 
 ComplexTransform::ComplexTransform(int i){
@@ -41,4 +44,14 @@ Complejo ComplexTransform::getInput(){
 
 Complejo ComplexTransform::getOutput(){
 	return this->output;
+}
+
+void ComplexTransform::setOption(int option)
+{
+	ComplexTransform::UserOption = option;
+}
+
+int ComplexTransform::getOption(void)
+{
+	return this->option;
 }

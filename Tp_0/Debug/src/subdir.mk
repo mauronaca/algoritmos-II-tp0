@@ -4,27 +4,27 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Complejo.cpp \
 ../src/ComplexPlane.cpp \
 ../src/ComplexTransform.cpp \
 ../src/Images.cpp \
 ../src/cmdline.cpp \
-../src/Complejo.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/Complejo.o \
 ./src/ComplexPlane.o \
 ./src/ComplexTransform.o \
 ./src/Images.o \
 ./src/cmdline.o \
-./src/Complejo.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/Complejo.d \
 ./src/ComplexPlane.d \
 ./src/ComplexTransform.d \
 ./src/Images.d \
 ./src/cmdline.d \
-./src/Complejo.d \
 ./src/main.d 
 
 
