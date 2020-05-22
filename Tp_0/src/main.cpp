@@ -6,6 +6,20 @@
 // Description : Trabajo PrÃ¡ctico NÂ° 0
 //============================================================================
 
+
+//#define ECLIPSE_BUILD
+#define CONSOLDE_BUILD
+
+#ifdef ECLIPSE_BUILD
+	#define INPUT_IMAGE_PATH "Debug/utils/dragon.ascii.pgm"
+	#define OUTPUT_IMAGE_PATH "Debug/utils/fusible.pgm"
+#endif
+#ifdef CONSOLDE_BUILD
+	#define INPUT_IMAGE_PATH "utils/dragon.ascii.pgm"
+	#define OUTPUT_IMAGE_PATH "utils/fusible.pgm"
+#endif
+
+
 #include <iostream>
 #include "cmdline.h"
 #include "Images.h"
@@ -26,8 +40,7 @@ static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
-void multiply(istream *is, ostream *os);
-
+void transformar_imagen(const Images & origen, Images & destino);
 
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
@@ -49,93 +62,75 @@ static ostream* oss = 0;
 static fstream ifs;
 static fstream ofs;
 
-#define ECLIPSE_BUILD
-//#define CONSOLDE_BUILD
-
-#ifdef ECLIPSE_BUILD
-	#define INPUT_IMAGE_PATH "Debug/utils/dragon.ascii.pgm"
-	#define OUTPUT_IMAGE_PATH "Debug/utils/fusible.pgm"
-#endif
-#ifdef CONSOLDE_BUILD
-	#define INPUT_IMAGE_PATH "utils/dragon.ascii.pgm"
-	#define OUTPUT_IMAGE_PATH "utils/fusible.pgm"
-#endif
-
 
 /*====================================================================================*/
 
+/*====================================================================================*/
+//									MAIN
+/*====================================================================================*/
 
 
 int main(int argc, char * const argv[]) {
 
-	/*----------------------------------------*/
-	/*-------------- Pruebas -----------------*/
-	/*----------------------------------------*/
-	
-	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
-	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
+	cmdline cmdl(options);
+	cmdl.parse(argc, argv);
 
-//	ifs.open(INPUT_IMAGE_PATH, ios::in);
-//	ofs.open(OUTPUT_IMAGE_PATH, ios::out);
-//	oss = &ofs;
-//	iss = &ifs;
-//
-//	string stest;
-//
-//	if(!iss->good()){
-//		cout << "1-" << endl;
-//		cout << "Fallo al abrir el archivo" << endl;
-//		exit(1);
-//	}
+	Images origen;
+	origen.loadFile(iss);
+
+	Images destino(origen);
+	transformar_imagen(origen,destino);
+
+	destino.saveFile(oss);
+
+	if(iss != &cin)
+		ifs.close();
+	if(oss != &cout)
+		ofs.close();
+
+	exit(0);
+}
 
 
-	Images origen(10,10,15); //NO BORRAR
-	origen.loadFile(iss); //NO BORRAR
 
-	int ancho = origen.getWidth(); //NO BORRAR
-	int altura = origen.getHeight(); //NO BORRAR
 
-	cout << "Datos origen:" << endl;
-	cout << "Ancho: " << ancho << " Altura: " << altura << " Maximo brillo: " << origen.getMaxInt() << endl;
-	//cout << origen[1][1] << endl;
-	cout << endl;
+/*====================================================================================*/
+// 								funciones xtra
+/*====================================================================================*/
 
-	//origen.printColours();
-	Images destino(origen); //NO BORRAR
-	Complejo aux(0,0);
-	
+void transformar_imagen(const Images & origen, Images & destino){
 
-	/*TEST DE COMPLEXPLANE Y COMPLEXTRANSFORM*/
+	if(&origen == &destino)
+		return;
 
+	Complejo z_aux(0,0);
 	ComplexPlane plano(origen);
 	ComplexTransform transformada;
+
+	int ancho = origen.getWidth();
+	int altura = origen.getHeight();
+
 
 	for(int i = 0; i < altura; i++){
 		for(int j = 0; j < ancho; j++){
 
 			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
-			aux = plano.getComp();
+			z_aux = plano.getComp();
 
-			transformada.fun(aux); //calcula la anti transformada
-			aux = transformada.getOutput();
-			 
-			plano.comp2Index(aux); //guarda los indices del pixel del origen
-			
+			transformada.fun(z_aux); //calcula la anti transformada
+			z_aux = transformada.getOutput();
+
+			plano.comp2Index(z_aux); //guarda los indices del pixel del origen
+
 			if(plano.getRow() < 0 || plano.getCol() < 0)
-				destino[i][j]=0; //guarda vacÃ­o
+				destino(i,j)=0; //guarda vacÃ­o
 			else
-				destino[i][j]=origen[plano.getRow()][plano.getCol()]; //guarda el pixel
-				
+				destino(i,j) = origen(plano.getRow(),plano.getCol()); //guarda el pixel
+
 		}
 	}
 
-	//origen.printColours();
-	//destino.printColours();
-	destino.saveFile(oss);
-	ifs.close();
-	ofs.close();
-
-	return 0;
+	return;
 }
 
 /********** Funciones invocadas por CMDLINE ******************************/
@@ -172,7 +167,7 @@ opt_input(string const &arg)
 static void
 opt_output(string const &arg)
 {
-	cout<< "La direccion del archivo Destino es :"<< arg.c_str() <<endl;
+	cout<< "La direccion del archivo Destino es: "<< arg.c_str() <<endl;
 	// Si el nombre del archivos es "-", usaremos la salida
 	// estándar. De lo contrario, abrimos un archivo en modo
 	// de escritura.
@@ -199,7 +194,7 @@ static void
 opt_function(string const &arg)
 {
 	istringstream iss(arg);
-	cout<< "El La transformacion elegida es f(z)= " <<arg.c_str() <<endl;
+	cout<< "La transformacion elegida es f(z)= " <<arg.c_str() <<endl;
 
 	// Intentamos extraer el factor de la línea de comandos.
 	// Para detectar argumentos que únicamente consistan de

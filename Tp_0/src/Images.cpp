@@ -144,35 +144,41 @@ int & Images::operator[](const std::pair<int,int> & index){
 	return this->imagen[row][col];
 }
 
-Images::fila Images::operator[](const int fil){
-	
-	// Si el indice de fila pasado es menor a 0 o mayor a la altura
-	// devuelve un objeto fila con argumentos: El objeto imagen this, y el indice fila 0
-	//
-	if( fil < 0 || fil >= this->height)
-			return fila(*this, 0);
-	// Si el indice pasado esta bien, se le pasa a fila ese indice
-	// 
-	return fila(*this, fil);
+int & Images::operator()(const int & row, const int & col){
+
+	if(row < 0 || col < 0 || row >= this->height || col >= this->width)
+		return imagen[0][0];
+
+	return(this->imagen[row][col]);
 }
 
-int Images::getWidth(){
+const int & Images::operator()(const int & row, const int & col) const{
+
+	if(row < 0 || col < 0 || row >= this->height || col >= this->width)
+		return imagen[0][0];
+
+	return(this->imagen[row][col]);
+}
+
+
+
+int Images::getWidth() const{
 	return this->width;
 }
 
-int Images::getMaxInt(){
+int Images::getMaxInt() const{
 	return this->maxInt;
 }
 
-int Images::getHeight(){
+int Images::getHeight() const{
 	return this->height;
 }
 
-int ** Images::getColours(){
+int ** Images::getColours() const{
 	return this->imagen;
 }
 
-std::string Images::getMagicNumber(){
+std::string Images::getMagicNumber() const{
 	return this->magicNumber;
 }
 
