@@ -18,7 +18,7 @@ Images::Images() {
 	for(int filas = 0; filas < height; filas++)
 		this->imagen[filas] = new int[width];
 
-	// Inicializo la matriz con todo 0´s
+	// Inicializo la matriz con todos 0's
 	//
 	for(int filas = 0; filas < height; filas++)
 		for(int cols = 0; cols < width; cols++)
@@ -287,9 +287,10 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 
 const Images & Images::loadFile(std::istream * image){
 
-	if(!image->good()){
+	if( !(image->good()) ){
 		cerr << "Fallo al abrir el archivo" << endl;
-		return *this;
+		//return *this;
+		exit(1);
 	}
 	
 	// line es el string donde se almacenera la linea leida en cuestion.

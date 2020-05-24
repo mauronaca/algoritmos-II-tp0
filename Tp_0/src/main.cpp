@@ -1,23 +1,9 @@
 //============================================================================
-// Name        : Tp_0.cpp
+// Name        : main.cpp
 // Author      : Nacachian, Urquiza, Vera
-// Version     :
-// Copyright   : 
-// Description : Trabajo PrÃ¡ctico NÂ° 0
+// Version     : 1.1.1
+// Description : Trabajo Practico Nº 0
 //============================================================================
-
-
-//#define ECLIPSE_BUILD
-#define CONSOLDE_BUILD
-
-#ifdef ECLIPSE_BUILD
-	#define INPUT_IMAGE_PATH "Debug/utils/dragon.ascii.pgm"
-	#define OUTPUT_IMAGE_PATH "Debug/utils/fusible.pgm"
-#endif
-#ifdef CONSOLDE_BUILD
-	#define INPUT_IMAGE_PATH "utils/dragon.ascii.pgm"
-	#define OUTPUT_IMAGE_PATH "utils/fusible.pgm"
-#endif
 
 
 #include <iostream>
@@ -31,16 +17,20 @@ using namespace std;
 
 
 /*=====================================================================================*/
-// 									ELEMENTOS GLOBALES 
+// 									PROTOTIPOS
 /*=====================================================================================*/
 
-// Opciones del programa (usando la libreria cmdline que proporcionaron en la practica): 
 
 static void opt_input(string const &);
 static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void transformar_imagen(const Images & origen, Images & destino);
+
+
+/*=====================================================================================*/
+// 								ELEMENTOS GLOBALES
+/*=====================================================================================*/
 
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
@@ -49,11 +39,6 @@ static option_t options[] = {
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 };
-
-
-
-// Funciones 
-//
 //typedef enum token_functions {EXPZ, Z}; //, COSZ, SINZ };
 const string functions[] = {"exp(z)", "z"}; //, "cos(z)", "sin(z)" };
 
@@ -64,23 +49,23 @@ static fstream ofs;
 
 
 /*====================================================================================*/
-
-/*====================================================================================*/
 //									MAIN
 /*====================================================================================*/
 
 
-int main(int argc, char * const argv[]) {
+int main(int argc, char * const argv[]){
 
+	//------Valido Argumentos ------//
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
 
+	//------Creo Imagenes de origen y destino ------//
 	Images origen;
-	origen.loadFile(iss);
-
 	Images destino(origen);
-	transformar_imagen(origen,destino);
 
+	//------Trasnformo y guardo ------//
+	origen.loadFile(iss);
+	transformar_imagen(origen,destino);
 	destino.saveFile(oss);
 
 	if(iss != &cin)
@@ -95,8 +80,9 @@ int main(int argc, char * const argv[]) {
 
 
 /*====================================================================================*/
-// 								funciones xtra
+// 						FUNCIONES INVOCADAS EN EL MAIN
 /*====================================================================================*/
+
 
 void transformar_imagen(const Images & origen, Images & destino){
 
@@ -133,24 +119,27 @@ void transformar_imagen(const Images & origen, Images & destino){
 	return;
 }
 
-/********** Funciones invocadas por CMDLINE ******************************/
+//------------------ Callbacks de CMDLINE ------------------------------//
 
 static void
 opt_input(string const &arg)
 {
-	cout<<"La direccion del archivo Origen es :"<< arg.c_str() <<endl;
 	// Si el nombre del archivos es "-", usaremos la entrada
 	// estándar. De lo contrario, abrimos un archivo en modo
 	// de lectura.
 	//
 	if (arg == "-") {
 		iss = &cin;		// Establezco la entrada estandar cin como flujo de entrada
+		cout<<"La direccion del archivo Origen es : Cin (Entrada Standar)" <<endl;
+
 	}
 	else {
 		ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
 										// sequence of characters (i.e., a C-string) representing
 										// the current value of the string object.
 		iss = &ifs;
+		cout<<"La direccion del archivo Origen es :"<< arg.c_str() <<endl;
+
 	}
 
 	// Verificamos que el stream este OK.
@@ -167,16 +156,18 @@ opt_input(string const &arg)
 static void
 opt_output(string const &arg)
 {
-	cout<< "La direccion del archivo Destino es: "<< arg.c_str() <<endl;
+
 	// Si el nombre del archivos es "-", usaremos la salida
 	// estándar. De lo contrario, abrimos un archivo en modo
 	// de escritura.
 	//
 	if (arg == "-") {
 		oss = &cout;	// Establezco la salida estandar cout como flujo de salida
+		cout<< "La direccion del archivo Destino es: Cout (Salida Standar)" << endl;
 	} else {
 		ofs.open(arg.c_str(), ios::out);
 		oss = &ofs;
+		cout<< "La direccion del archivo Destino es: "<< arg.c_str() <<endl;
 	}
 
 	// Verificamos que el stream este OK.
@@ -209,7 +200,6 @@ opt_function(string const &arg)
 			 << endl;
 		exit(1);
 	}
-
 
 	if( option.compare("z") == 0){
 		ComplexTransform::setOption(1);

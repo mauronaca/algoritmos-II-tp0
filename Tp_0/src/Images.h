@@ -34,7 +34,7 @@ private:
 	std::string magicNumber; 
 
 public:
-	// Constructor por defecto, inicializa todo en 0
+	// Constructor por defecto, inicializa en 0
 	Images();
 	
 	// Constructor, se le pasa como argumento, ancho, alto y maxima intensdad

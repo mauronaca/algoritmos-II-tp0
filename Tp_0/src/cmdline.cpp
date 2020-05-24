@@ -11,6 +11,7 @@ using namespace std;
 
 cmdline::cmdline()
 {
+	option_table = NULL;
 }
 
 cmdline::cmdline(option_t *table) : option_table(table)
@@ -62,7 +63,7 @@ cmdline::parse(int argc, char * const argv[])
 		}
 
 		// Usamos "--" para marcar el fin de las
-		// opciones; todo los argumentos que puedan
+		// opciones; todos los argumentos que puedan
 		// estar a continuación no son interpretados
 		// como opciones.
 		//
@@ -71,7 +72,7 @@ cmdline::parse(int argc, char * const argv[])
 			break;
 
 		// Finalmente, vemos si se trata o no de una
-		// opción larga; y llamamos al método que se
+		// opción larga; y llamamos al metodo que se
 		// encarga de cada caso.
 		//
 		if (argv[i][1] == '-')

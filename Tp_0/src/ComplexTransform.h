@@ -8,7 +8,7 @@ private:
 	Complejo input;
 	Complejo output;
 	int option; //1: z ; 2: exp(z) ;3 rotar; en otro caso: z
-	static int UserOption;
+	static int userOption;
 
 public:
 	ComplexTransform(); //constructor
