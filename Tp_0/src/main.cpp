@@ -73,7 +73,7 @@ int main(int argc, char * const argv[]){
 	if(oss != &cout)
 		ofs.close();
 
-	exit(0);
+	return 0;
 }
 
 

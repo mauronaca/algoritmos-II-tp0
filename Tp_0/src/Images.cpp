@@ -72,7 +72,6 @@ Images::~Images() {
 	this->height = 0;
 	this->maxInt = 0;
 	this->magicNumber = "";
-	cout<<"Destruida Imagen"<<endl;
 
 }
 
