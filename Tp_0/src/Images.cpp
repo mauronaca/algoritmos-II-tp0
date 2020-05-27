@@ -56,7 +56,7 @@ Images::Images(int width, int height, int max) {
 		for(int cols = 0; cols < width; cols++)
 			this->imagen[filas][cols] = 0;
 	
-	// El nombre del ehader queda en blanco
+	// El nombre del header queda en blanco
 	this->magicNumber = "";
 }
 
@@ -72,6 +72,7 @@ Images::~Images() {
 	this->height = 0;
 	this->maxInt = 0;
 	this->magicNumber = "";
+	cout<<"Destruida Imagen"<<endl;
 
 }
 
@@ -212,7 +213,7 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		return true;
 	}
 
-	// Primera linea el header
+	// Primera linea, el header
 	//
 	if(nline == 1){
 		image->magicNumber = ss->str();

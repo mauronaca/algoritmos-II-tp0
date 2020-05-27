@@ -30,7 +30,7 @@ private:
 	// Matriz donde se almacenan los valores de intensidad
 	int ** imagen; 
 	
-	// El header o algo asi, donde dice P2. Si es P2, el formato es pgm
+	// El header. Si es P2, el formato es pgm
 	std::string magicNumber; 
 
 public:

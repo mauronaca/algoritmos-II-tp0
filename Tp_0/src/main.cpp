@@ -2,7 +2,7 @@
 // Name        : main.cpp
 // Author      : Nacachian, Urquiza, Vera
 // Version     : 1.1.1
-// Description : Trabajo Practico N∫ 0
+// Description : Trabajo Pr√°ctico Nro. 0
 //============================================================================
 
 
@@ -61,10 +61,10 @@ int main(int argc, char * const argv[]){
 
 	//------Creo Imagenes de origen y destino ------//
 	Images origen;
+	origen.loadFile(iss);
 	Images destino(origen);
 
 	//------Trasnformo y guardo ------//
-	origen.loadFile(iss);
 	transformar_imagen(origen,destino);
 	destino.saveFile(oss);
 
@@ -125,7 +125,7 @@ static void
 opt_input(string const &arg)
 {
 	// Si el nombre del archivos es "-", usaremos la entrada
-	// est·ndar. De lo contrario, abrimos un archivo en modo
+	// est?dar. De lo contrario, abrimos un archivo en modo
 	// de lectura.
 	//
 	if (arg == "-") {
@@ -158,7 +158,7 @@ opt_output(string const &arg)
 {
 
 	// Si el nombre del archivos es "-", usaremos la salida
-	// est·ndar. De lo contrario, abrimos un archivo en modo
+	// est?dar. De lo contrario, abrimos un archivo en modo
 	// de escritura.
 	//
 	if (arg == "-") {
@@ -177,7 +177,7 @@ opt_output(string const &arg)
 		     << arg
 		     << "."
 		     << endl;
-		exit(1);		// EXIT: TerminaciÛn del programa en su totalidad
+		exit(1);		// EXIT: Terminaci? del programa en su totalidad
 	}
 }
 
@@ -187,10 +187,10 @@ opt_function(string const &arg)
 	istringstream iss(arg);
 	cout<< "La transformacion elegida es f(z)= " <<arg.c_str() <<endl;
 
-	// Intentamos extraer el factor de la lÌnea de comandos.
-	// Para detectar argumentos que ˙nicamente consistan de
-	// n˙meros enteros, vamos a verificar que EOF llegue justo
-	// despuÈs de la lectura exitosa del escalar.
+	// Intentamos extraer el factor de la l?ea de comandos.
+	// Para detectar argumentos que ?nicamente consistan de
+	// n?meros enteros, vamos a verificar que EOF llegue justo
+	// despu? de la lectura exitosa del escalar.
 	//
 	string option;
 	iss >> option;
