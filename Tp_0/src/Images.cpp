@@ -5,25 +5,17 @@
 using namespace std;
 
 Images::Images() {
-	// Valores al azar sin criterio alguno
+	// Valores nulos, puesto que no se tiene imagen alguna
 	// 
-	this->width = 10;
-	this->height = 10;
-	this->maxInt = 255;
+	this->width = 0;
+	this->height = 0;
+	this->maxInt = 0;
 
-	// Pido memoria para la matriz.
+	// El puntero apunta a null.
 	//
-	this->imagen = new int * [this->height];
+	this->imagen = NULL;
 
-	for(int filas = 0; filas < height; filas++)
-		this->imagen[filas] = new int[width];
-
-	// Inicializo la matriz con todos 0's
-	//
-	for(int filas = 0; filas < height; filas++)
-		for(int cols = 0; cols < width; cols++)
-			this->imagen[filas][cols] = 0;
-
+	// El header esta vacio
 	this->magicNumber = "";
 }
 

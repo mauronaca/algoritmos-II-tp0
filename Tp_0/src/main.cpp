@@ -213,7 +213,6 @@ opt_function(string const &arg)
 		cerr << option <<" No es un parametro Valido "<< endl;
 		exit(1);
 	}
-
 }
 
 static void
