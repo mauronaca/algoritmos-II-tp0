@@ -94,8 +94,8 @@ void ComplexPlane::comp2Index(Complejo & z){
 	double real = z.getReal();
 	double imaginario = z.getImag();
 	
-
-	if(abs(real) > 1 || abs(imaginario) > 1) //sale por fuera del plano 
+	//si sale por fuera del plano, se guardan valores negativos de col y row 
+	if(abs(real) > 1 || abs(imaginario) > 1)
 	{
 		this->row = -1;
 		this->col = -1;
@@ -108,17 +108,17 @@ void ComplexPlane::comp2Index(Complejo & z){
 		this->comp = z;
 
 		//se aplican las funciones inversas a las utilizadas en index2comp();
-		if(real < 0)
-			this->col = colCentral*(real+1);
+		if(real <= 0)
+			this->col = std::round(colCentral*(real+1));
 
-		if(real >= 0)
-			this->col = (real-1)*colCentral + (this->image.getWidth()-1);
-
-		if(imaginario < 0)
-			this->row = (1-imaginario)*rowCentral;
+		if(real > 0)
+			this->col = std::round((real-1)*colCentral + (this->image.getWidth()-1));
 
 		if(imaginario >= 0)
-			this->row = (this->image.getHeight()-1) - (imaginario+1)*rowCentral;
+			this->row = std::round(rowCentral*(1-imaginario));
+
+		if(imaginario < 0)
+			this->row = std::round((this->image.getHeight()-1) - (imaginario+1)*rowCentral);
 	}
 
 }

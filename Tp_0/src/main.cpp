@@ -96,22 +96,24 @@ void transformar_imagen(const Images & origen, Images & destino){
 	int ancho = origen.getWidth();
 	int altura = origen.getHeight();
 
-
 	for(int i = 0; i < altura; i++){
 		for(int j = 0; j < ancho; j++){
-
-			plano.index2Comp(i, j); //guarda la coordenada en forma de num complejo
+			//guarda la coordenada en forma de num complejo
+			plano.index2Comp(i, j); 
 			z_aux = plano.getComp();
 
-			transformada.fun(z_aux); //calcula la anti transformada
+			//calcula la anti transformada
+			transformada.fun(z_aux);
 			z_aux = transformada.getOutput();
 
-			plano.comp2Index(z_aux); //guarda los indices del pixel del origen
+			//guarda los indices del pixel del origen
+			plano.comp2Index(z_aux);
 
+			//guarda vacío si algun subindice es negativo; caso contrario, guarda el pixel
 			if(plano.getRow() < 0 || plano.getCol() < 0)
-				destino(i,j)=0; //guarda vacío
+				destino(i,j)=0; 
 			else
-				destino(i,j) = origen(plano.getRow(),plano.getCol()); //guarda el pixel
+				destino(i,j) = origen(plano.getRow(),plano.getCol());
 
 		}
 	}
