@@ -1,6 +1,6 @@
 //
-// Version beta del agloritmo Shuntyng Yard
-// TODO:
+// Falta:
+// 
 // - numeros de mas de 1 digito
 // - funciones
 // - variables
