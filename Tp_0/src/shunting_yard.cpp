@@ -25,7 +25,7 @@ const char __img_character__ = 'i'; // Esto eventualmente lo sacare
 
 class Token {
 
-	// Este objeto puede tomar cualquier simbolo; si es un operador tendra las propiedades de precedencia
+	// La clase si es un operador tendra las propiedades de precedencia
 	// y asocitaivdad; en cambio si no es un operador, devolvera un caracter comun pero con precedencia y asoc. 0
 	// 
 	//
@@ -34,7 +34,6 @@ public:
 	// El token en cuestion
 	char symbol;
 	int value;
-	//string str;
 
 	// Tipo de simbolo:
 	// 
@@ -99,9 +98,8 @@ public:
 };
 
 
-bool isBalanced(const string&);
+bool isBalanced(const string&); // No sirve para nada,, el agloritmo ya verifica si esta balanceado o no
 int __pow(int r, int k);
-int apply_operation(int, int, char);
 Complejo apply_cmplx_operation(Complejo &, Complejo &, char);
 
 // ==================================================================================================================================== //
@@ -705,35 +703,6 @@ bool Token::isSeparator() {
 char Token::sym() {
 
 	return this->symbol;
-}
-
-int apply_operation(int val1, int val2, char  op) {
-	switch (op) {
-	case '+':
-		return val1 + val2;
-		break;
-	case '-':
-		return val1 - val2;
-		break;
-	case '*':
-		return val1 * val2;
-		break;
-	case '/':
-		return val1 / val2;
-		break;
-	case '^':
-		return __pow(val1,val2);
-		break;
-	default:
-		return 0;
-		break;
-	}
-}
-
-int __pow(int r, int k) {
-	if (k == 0)
-		return 1;
-	return r * __pow(r, k - 1);
 }
 
 Complejo apply_cmplx_operation(Complejo & z1, Complejo & z2, char op) {
