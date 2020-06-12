@@ -7,6 +7,9 @@
 
 
 #include <iostream>
+#include <string>
+#include <cstdio>
+#include <algorithm>
 #include "cmdline.h"
 #include "Images.h"
 #include "Complejo.h"
@@ -47,6 +50,10 @@ static ostream* oss = 0;
 static fstream ifs;
 static fstream ofs;
 
+static bool outputFileIsOpen = false;
+
+static string outputFileName;
+
 
 /*====================================================================================*/
 //									MAIN
@@ -59,19 +66,42 @@ int main(int argc, char * const argv[]){
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
 
+
 	//------Creo Imagenes de origen y destino ------//
 	Images origen;
-	origen.loadFile(iss);
-	Images destino(origen);
 
-	//------Trasnformo y guardo ------//
-	transformar_imagen(origen,destino);
-	destino.saveFile(oss);
+	std::cout << "Procesando imagen..." << std::endl;	
 
-	if(iss != &cin)
+	//------Valido si la imagen es PGM ------//
+	if(!origen.loadFile(iss)){
+
+		// Si no es PGM se cierran todos los archivos abiertos y aborta el programa
+		//
+
+		if(oss != &cout)
+			std::remove(outputFileName.c_str());
+		
 		ifs.close();
-	if(oss != &cout)
 		ofs.close();
+			
+		return 1;
+
+	} else {
+
+		Images destino(origen);
+
+		//------Trasnformo y guardo ------//
+		transformar_imagen(origen,destino);
+
+		std::cout << "Guardando imagen..." << std::endl;
+		destino.saveFile(oss);
+
+	}
+
+	ifs.close();
+	ofs.close();
+
+	std::cout << "La transformacion fue exitosa." << std::endl;
 
 	return 0;
 }
@@ -133,7 +163,7 @@ opt_input(string const &arg)
 	if (arg == "-") {
 		iss = &cin;		// Establezco la entrada estandar cin como flujo de entrada
 		cout<<"La direccion del archivo Origen es : Cin (Entrada Standar)" <<endl;
-
+	
 	}
 	else {
 		ifs.open(arg.c_str(), ios::in); // c_str(): Returns a pointer to an array that contains a null-terminated
@@ -144,15 +174,23 @@ opt_input(string const &arg)
 
 	}
 
+
 	// Verificamos que el stream este OK.
 	//
 	if (!iss->good()) {
 		cerr << "cannot open "
-		     << arg
-		     << "."
-		     << endl;
+			 << arg
+			 << "."
+			 << endl;
+		if(outputFileIsOpen && oss != &cout){
+			std::remove(outputFileName.c_str());
+			ofs.close();
+		}
 		exit(1);
+
 	}
+
+
 }
 
 static void
@@ -167,6 +205,8 @@ opt_output(string const &arg)
 		oss = &cout;	// Establezco la salida estandar cout como flujo de salida
 		cout<< "La direccion del archivo Destino es: Cout (Salida Standar)" << endl;
 	} else {
+		outputFileName = arg.c_str();
+		
 		ofs.open(arg.c_str(), ios::out);
 		oss = &ofs;
 		cout<< "La direccion del archivo Destino es: "<< arg.c_str() <<endl;
@@ -181,6 +221,8 @@ opt_output(string const &arg)
 		     << endl;
 		exit(1);		// EXIT: Terminaci? del programa en su totalidad
 	}
+
+	outputFileIsOpen = true;
 }
 
 static void

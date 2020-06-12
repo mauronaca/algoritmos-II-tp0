@@ -61,7 +61,7 @@ public:
 	friend bool pgmParser(int & , int &, int &, std::stringstream  * , Images * );
 	
 	// Carga un archivo .pgm.
-	const Images & loadFile(std::istream * ); 
+	bool loadFile(std::istream * ); 
 	
 	// Se guarda la instancia de Images en un archiv formato .pgm
 	const Images & saveFile(std::ostream * ); 

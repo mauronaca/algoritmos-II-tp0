@@ -1,6 +1,7 @@
 
 #include "Images.h"
 #include <cstdlib>
+#include <algorithm> // REmover espacios en blanco
 
 using namespace std;
 
@@ -213,12 +214,19 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		//
 		for (size_t i = 0; i < image->magicNumber.length(); i++){
 		    if (		image->magicNumber.c_str()[i] == '\r'
-		    		|| 	image->magicNumber.c_str()[i] == '\n'
-		    		|| 	image->magicNumber.c_str()[i] == '\r\n'){
+		    		|| 	image->magicNumber.c_str()[i] == '\n'){
+		    		//|| 	image->magicNumber.c_str()[i] == '\r\n'){
 
 		    	image->magicNumber = image->magicNumber.substr(0, i);
 		    }
+
 		}
+
+		// Borrar cualquier espacio en blanco del string que almacena P2
+		//
+		std::string::iterator end_pos = std::remove(image->magicNumber.begin(), image->magicNumber.end(), ' ');
+		image->magicNumber.erase(end_pos, image->magicNumber.end());
+
 		// Si no es P2, la funcion devuelve falso. Y en ese caso debera cortar la carga del archivo ya que no estamos
 		// interesados en otro tipo de formato.
 		//
@@ -277,7 +285,7 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 	return true;
 }
 
-const Images & Images::loadFile(std::istream * image){
+bool Images::loadFile(std::istream * image){
 
 	if( !(image->good()) ){
 		cerr << "Fallo al abrir el archivo" << endl;
@@ -296,6 +304,11 @@ const Images & Images::loadFile(std::istream * image){
 	int nfils = 0;
 	int ncols = 0;
 
+	//if(image != &cin){
+	//	image->clear();
+    //	image->seekg(0);
+	//}
+
 	// Lee linea por linea y la almacena en string, hasta encontrar eof.
 	// Luego se llama a la funcion pgmParse, la cual se encargara de procesar que linea es en cuestion
 	// y guardar los valores en la clase imagen. Notar que en esa funcion si se encuentra un comentario
@@ -303,12 +316,13 @@ const Images & Images::loadFile(std::istream * image){
 	//
 	while( getline(*image, line) ){
 		stringstream ss(line);
-		if(!pgmParser(nline, nfils, ncols, &ss, this))
-			return *this;
+		if(!pgmParser(nline, nfils, ncols, &ss, this)){
+			return false;
+		}
 		nline++;
 	}
 
-	return *this;
+	return true;
 
 }
 
