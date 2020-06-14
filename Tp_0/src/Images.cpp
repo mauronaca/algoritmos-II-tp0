@@ -321,6 +321,11 @@ bool Images::loadFile(std::istream * image){
 		nline++;
 	}
 
+	if(nline == 1){
+		std::cout << "Formato no PGM" << endl;
+		return false;
+	}
+
 	return true;
 
 }

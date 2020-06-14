@@ -199,6 +199,7 @@ opt_input(string const &arg)
 			//
 			size_t npos = string::npos;
 			if (ss.str().find('#') != npos){
+				inputFileIsPGM = false;
 				continue;
 			}
 
@@ -347,6 +348,6 @@ openOutputFile(){
 		return true;
 	}
 
-	return true;
+	//return true;
 
 }
