@@ -77,7 +77,8 @@ int main(int argc, char * const argv[]){
 
 		// Si no es PGM se cierran todos los archivos abiertos y aborta el programa
 		//
-
+		
+		cerr << "Fallo al abrir el archivo" << endl;
 		if(oss != &cout)
 			std::remove(outputFileName.c_str());
 		

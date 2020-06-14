@@ -287,11 +287,8 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 
 bool Images::loadFile(std::istream * image){
 
-	if( !(image->good()) ){
-		cerr << "Fallo al abrir el archivo" << endl;
-		//return *this;
-		exit(1);
-	}
+	if( !(image->good()) )
+		return false;
 	
 	// line es el string donde se almacenera la linea leida en cuestion.
 	// nline es el numero de linea. La primer linea es donde esta el magic number, la segunda linea
