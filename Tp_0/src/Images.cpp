@@ -1,4 +1,3 @@
-
 #include "Images.h"
 #include <cstdlib>
 #include <algorithm> // REmover espacios en blanco
@@ -23,11 +22,11 @@ Images::Images() {
 Images::Images(int width, int height, int max) {
 
 	if(width <= 0 || height <= 0){
-		// Valores por defecto: (Los elegi sin criterio)
+		// Valores por defecto:
 		//
-		this->width = 10;
-		this->height = 10;
-		this->maxInt = 255;
+		this->width = 0;
+		this->height = 0;
+		this->maxInt = 1;
 
 	} else
 	{
@@ -131,25 +130,28 @@ int & Images::operator[](const std::pair<int,int> & index){
 	int col = index.second;
 
 	// Si los indices estan afuera devuelve el valor de [0][0]
+	/*
 	if( (row < 0 || row >= this->height) && (col < 0 || col >= this->width) )
-		return this->imagen[0][0];
+		return 0;
+	*/
 
 	return this->imagen[row][col];
 }
 
 int & Images::operator()(const int & row, const int & col){
-
+	/*
 	if(row < 0 || col < 0 || row >= this->height || col >= this->width)
-		return imagen[0][0];
+		return 0;
+	*/
 
 	return(this->imagen[row][col]);
 }
 
 const int & Images::operator()(const int & row, const int & col) const{
-
+	/*
 	if(row < 0 || col < 0 || row >= this->height || col >= this->width)
-		return imagen[0][0];
-
+		return 0;
+	*/
 	return(this->imagen[row][col]);
 }
 
@@ -224,6 +226,14 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 
 		// Borrar cualquier espacio en blanco del string que almacena P2
 		//
+		/* 
+		std::remove desplaza los caracteres distintos a ' ' (espacio) hasta el principio de la cadena
+			sin alterar el orden relativo de los elementos.
+			El iterador que devuelve apunta al final lógico de la cadena.
+
+		erase elimina los espacios que se encuentran entre el final lógico y el final físico de la cadena
+			logrando así, en este caso, que nos quede una cadena sin espacios. 
+		*/
 		std::string::iterator end_pos = std::remove(image->magicNumber.begin(), image->magicNumber.end(), ' ');
 		image->magicNumber.erase(end_pos, image->magicNumber.end());
 
@@ -237,8 +247,8 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		return true;
 	}
 
-	// Segunda linea. Primero elimina la matriz cargada por el construcutor. Luego lee los nuevos tama;os
-	// Por ultimo pide memoria para la matriz con los nuevos tamalios
+	// Segunda linea. Primero elimina la matriz cargada por el construcutor. Luego lee los nuevos tamanios
+	// Por ultimo pide memoria para la matriz con los nuevos tamanios
 	//
 	if(nline == 2){
 		for(int i = 0; i < image->height; i++)
@@ -246,6 +256,13 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		delete [] image->imagen;
 
 		*ss >> image->width >> image->height;
+
+		// Si la imagen no especifica tamaño alguno, devuelve falso. (!) 
+		//
+		if( (image->height == 0) && (image->width == 0) ){
+			cerr << "Tamanio no especificado." << endl;
+			return false;
+		}
 
 		image->imagen = new int * [image->height];
 
@@ -258,15 +275,28 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 			for(int cols = 0; cols < image->width; cols++)
 				image->imagen[filas][cols] = 0;
 
-		return true;
+		// Devuelve true unicamente si la imagen no está vacía. (!)
+		//
+		if(image->height != 0 || image->width != 0)
+			return true;
+
+		cerr << "Imagen vacía." << endl;
+		return false;
 	}
 
 	// Tercera linea, lee el maximo brillo.
 	//
 	if(nline == 3){
 		*ss >> image->maxInt;
-		return true;
+		
+		// Devuelve true solamente si la máxima intensidad es mayor a cero (!)
+		if(image->maxInt > 0)
+			return true;
+
+		cerr << "Intensidad no válida." <<endl;
+		return false;
 	}
+
 
 	// Comienza a leer los colores
 	//
@@ -282,13 +312,19 @@ bool pgmParser(int & nline, int & nfils, int & ncols, std::stringstream  * ss , 
 		}
 	}
 
-	return true;
+	// Devuelve true unicamente si la imagen no está vacía. (!)
+	//
+	if(image->height != 0 || image->width != 0)
+		return true;
+
+	cerr << "Imagen vacía." << endl;
+	return false;
 }
 
 bool Images::loadFile(std::istream * image){
 
 	if( !(image->good()) ){
-		cerr << "Fallo al abrir el archivo" << endl;
+		cerr << "Fallo al abrir el archivo." << endl;
 		return false;
 	}
 	
@@ -322,7 +358,7 @@ bool Images::loadFile(std::istream * image){
 	}
 
 	if(nline == 1){
-		std::cout << "Formato no PGM" << endl;
+		std::cout << "Formato no .pgm" << std::endl;
 		return false;
 	}
 
@@ -333,7 +369,7 @@ bool Images::loadFile(std::istream * image){
 const Images & Images::saveFile(ostream * image){
 
 	if(!image->good()){
-		cerr << "Fallo al abrir el archivo" << endl;
+		cerr << "Fallo al abrir el archivo." << endl;
 		return *this;
 	}
 
@@ -344,8 +380,9 @@ const Images & Images::saveFile(ostream * image){
 
 	for(int fils = 0; fils < this->height; fils++){
 		for(int cols = 0; cols < this->width; cols++){
-			*image << this->imagen[fils][cols] << endl;
+			*image << this->imagen[fils][cols] << ' ';
 		}
+		*image << endl;
 	}
 
 	return *this;
