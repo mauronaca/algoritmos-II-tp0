@@ -29,6 +29,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 void transformar_imagen(const Images & origen, Images & destino);
+static bool openOutputFile();
 
 
 /*=====================================================================================*/
@@ -50,7 +51,7 @@ static ostream* oss = 0;
 static fstream ifs;
 static fstream ofs;
 
-static bool outputFileIsOpen = false;
+static bool inputFileIsPGM = true;
 
 static string outputFileName;
 
@@ -67,17 +68,24 @@ int main(int argc, char * const argv[]){
 	cmdl.parse(argc, argv);
 
 
+	//------		Valido si la imagen es PGM 			 ------//
+	//------Se abre en funcion si el archivo es PGM o no ------//
+	if(!openOutputFile())
+		return 1;
+
 	//------Creo Imagenes de origen y destino ------//
 	Images origen;
 
 	std::cout << "Procesando imagen..." << std::endl;	
+	if(iss == &cin)
+		std::cout << "Ingrese la imagen por consola:" << std::endl;
 
-	//------Valido si la imagen es PGM ------//
+	//------Cargo la imagen de entrada ------//
 	if(!origen.loadFile(iss)){
 
-		// Si no es PGM se cierran todos los archivos abiertos y aborta el programa
+		// Si en el proceso hubo algun error inesperado (ie. la entrada es cin, la salida es un archivo
+		// y lo que se ingresa no es tipo pgm)
 		//
-
 		if(oss != &cout)
 			std::remove(outputFileName.c_str());
 		
@@ -175,6 +183,61 @@ opt_input(string const &arg)
 	}
 
 
+	// ============================================================================================================= //
+	//				Chequeo si el archivo de entrada contiene la linea P2, o sea si es formato PGM
+	// ============================================================================================================= //
+
+	if(iss != &cin){
+		string line;
+		string auxMagicNUmber;
+
+		while(getline(*iss, line)){
+
+			stringstream ss(line);
+
+			// Chequea si en la linea a leer existe el caracter #. En caso de que exista corta el proceso.
+			//
+			size_t npos = string::npos;
+			if (ss.str().find('#') != npos){
+				continue;
+			}
+
+			auxMagicNUmber = ss.str();
+
+			// Elimina el \n o \r que en algunos .pgm aparece
+			//
+			for (size_t i = 0; i < auxMagicNUmber.length(); i++){
+			    if (		auxMagicNUmber.c_str()[i] == '\r'
+			    		|| 	auxMagicNUmber.c_str()[i] == '\n'){
+			    	
+
+			    	auxMagicNUmber = auxMagicNUmber.substr(0, i);
+			    }
+
+			}
+
+			// Borrar cualquier espacio en blanco del string que almacena P2
+			//
+			std::string::iterator end_pos = std::remove(auxMagicNUmber.begin(), auxMagicNUmber.end(), ' ');
+			auxMagicNUmber.erase(end_pos, auxMagicNUmber.end());
+
+			// Si no es P2, la funcion devuelve falso. Y en ese caso debera cortar la carga del archivo ya que no estamos
+			// interesados en otro tipo de formato.
+			//
+			if( auxMagicNUmber.compare("P2") != 0 ){
+				inputFileIsPGM = false;
+			} else {
+				inputFileIsPGM = true;
+			}
+			break;
+
+
+		}
+	}
+
+
+	// ============================================================================================================= //
+
 	// Verificamos que el stream este OK.
 	//
 	if (!iss->good()) {
@@ -182,12 +245,8 @@ opt_input(string const &arg)
 			 << arg
 			 << "."
 			 << endl;
-		if(outputFileIsOpen && oss != &cout){
-			std::remove(outputFileName.c_str());
-			ofs.close();
-		}
+		ifs.close();
 		exit(1);
-
 	}
 
 
@@ -207,22 +266,12 @@ opt_output(string const &arg)
 	} else {
 		outputFileName = arg.c_str();
 		
-		ofs.open(arg.c_str(), ios::out);
-		oss = &ofs;
+		//ofs.open(arg.c_str(), ios::out);
+		//oss = &ofs;
 		cout<< "La direccion del archivo Destino es: "<< arg.c_str() <<endl;
 	}
 
-	// Verificamos que el stream este OK.
-	//
-	if (!oss->good()) {
-		cerr << "cannot open "
-		     << arg
-		     << "."
-		     << endl;
-		exit(1);		// EXIT: Terminaci? del programa en su totalidad
-	}
 
-	outputFileIsOpen = true;
 }
 
 static void
@@ -265,3 +314,39 @@ opt_help(string const &arg)
 	exit(0);
 }
 
+static bool
+openOutputFile(){
+
+	if(!inputFileIsPGM){
+
+		ifs.close();
+		cout << "El archivo de entrada no tiene formato PGM" << endl;
+		return false;
+	}
+
+	else {
+
+		if(oss != &cout){
+			ofs.open(outputFileName.c_str(), ios::out);
+			oss = &ofs;	
+		}
+		
+		// Verificamos que el stream este OK.
+		//
+		if (!oss->good()) {
+			cerr << "cannot open "
+		     	<< outputFileName
+		     	<< "."
+		     	<< endl;
+
+		     ifs.close();
+			return false;
+
+		}
+
+		return true;
+	}
+
+	return true;
+
+}

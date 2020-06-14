@@ -289,8 +289,7 @@ bool Images::loadFile(std::istream * image){
 
 	if( !(image->good()) ){
 		cerr << "Fallo al abrir el archivo" << endl;
-		//return *this;
-		exit(1);
+		return false;
 	}
 	
 	// line es el string donde se almacenera la linea leida en cuestion.
@@ -304,10 +303,10 @@ bool Images::loadFile(std::istream * image){
 	int nfils = 0;
 	int ncols = 0;
 
-	//if(image != &cin){
-	//	image->clear();
-    //	image->seekg(0);
-	//}
+	if(image != &cin){
+		image->clear();
+    	image->seekg(0);
+	}
 
 	// Lee linea por linea y la almacena en string, hasta encontrar eof.
 	// Luego se llama a la funcion pgmParse, la cual se encargara de procesar que linea es en cuestion
