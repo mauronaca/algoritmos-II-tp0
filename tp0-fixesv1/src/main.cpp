@@ -74,10 +74,7 @@ int main(int argc, char * const argv[]){
 
 	//------Cargo la imagen de entrada ------//
 	if(!origen.loadFile(iss)){
-
-		// Si en el proceso hubo algun error inesperado (ie. la entrada es cin,
-		// y lo que se ingresa no es tipo pgm)
-		//
+	//------Valido si la imagen es PGM ------//
 		ifs.close();
 		ofs.close();
 			
@@ -85,7 +82,6 @@ int main(int argc, char * const argv[]){
 
 	} else {
 
-		//------		Valido si la imagen es PGM 			 ------//
 		//------Se abre en funcion si el archivo es PGM o no ------//
 		if(!openOutputFile())
 			return 1;
